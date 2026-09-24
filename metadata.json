@@ -1,0 +1,8 @@
+{
+  "name": "Remix Danmarks Boligguide \u0026 Portaler",
+  "description": "Eksklusiv adgang til Danmarks samlede boligdatabase over 90+ verificerede boligforeninger, almene ventelister, studieboliger og private portaler.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
