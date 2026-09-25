@@ -6,7 +6,7 @@ import {
   CheckCircle2, 
   CreditCard, 
   ExternalLink, 
-  ArrowRight,
+  ArrowRight, 
   KeyRound,
   Check,
   AlertCircle,
@@ -15,6 +15,11 @@ import {
 import { STRIPE_PAYMENT_LINK, housingCategories } from '../data/housingData';
 import { translations } from '../data/translations';
 import { Language } from '../types';
+import { 
+  isValidAccessCode, 
+  isValidStripeSessionId, 
+  saveAuthorizedAccess 
+} from '../utils/accessControl';
 
 interface PaywallModalProps {
   isOpen: boolean;
@@ -35,22 +40,39 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
   const totalPortalsCount = housingCategories.reduce((acc, cat) => acc + cat.items.length, 0);
   const [isVerifying, setIsVerifying] = useState(false);
   const [showAlreadyPaid, setShowAlreadyPaid] = useState(false);
-  const [emailInput, setEmailInput] = useState('');
+  const [accessInput, setAccessInput] = useState('');
   const [verifyError, setVerifyError] = useState('');
 
   if (!isOpen) return null;
 
-  const handleVerifyEmail = (e: React.FormEvent) => {
+  const handleVerifyAccess = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!emailInput || !emailInput.includes('@')) {
-      setVerifyError(language === 'da' ? 'Indtast venligst en gyldig e-mail' : 'Please enter a valid email');
+    const clean = accessInput.trim();
+    if (!clean) {
+      setVerifyError(language === 'da' ? 'Indtast venligst en gyldig kode eller reference' : 'Please enter a valid code or reference');
       return;
     }
     setIsVerifying(true);
+    setVerifyError('');
+
     setTimeout(() => {
-      setIsVerifying(false);
-      onUnlockSuccess();
-    }, 800);
+      if (isValidAccessCode(clean)) {
+        saveAuthorizedAccess('access_code', clean);
+        setIsVerifying(false);
+        onUnlockSuccess();
+      } else if (isValidStripeSessionId(clean)) {
+        saveAuthorizedAccess('stripe_session', clean);
+        setIsVerifying(false);
+        onUnlockSuccess();
+      } else {
+        setIsVerifying(false);
+        setVerifyError(
+          language === 'da'
+            ? 'Ugyldig adgangskode eller reference. Tjek din kvittering fra Stripe.'
+            : 'Invalid code or reference. Please check your Stripe receipt.'
+        );
+      }
+    }, 400);
   };
 
   return (
@@ -169,13 +191,13 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
                   {t.alreadyPaid}
                 </button>
               ) : (
-                <form onSubmit={handleVerifyEmail} className="w-full flex flex-col sm:flex-row gap-2 items-center justify-center">
+                <form onSubmit={handleVerifyAccess} className="w-full flex flex-col sm:flex-row gap-2 items-center justify-center">
                   <input
-                    type="email"
-                    placeholder={language === 'da' ? 'Din Stripe e-mail...' : 'Your Stripe email...'}
-                    value={emailInput}
+                    type="text"
+                    placeholder={language === 'da' ? 'Adgangskode (f.eks. BOPÆL2026) eller Stripe ID' : 'Access code or Stripe ID'}
+                    value={accessInput}
                     onChange={(e) => {
-                      setEmailInput(e.target.value);
+                      setAccessInput(e.target.value);
                       setVerifyError('');
                     }}
                     className="w-full sm:w-64 text-xs px-3 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -185,7 +207,7 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
                     disabled={isVerifying}
                     className="w-full sm:w-auto text-xs px-3.5 py-2 font-semibold text-white bg-slate-900 hover:bg-slate-800 rounded-lg shrink-0 transition-colors disabled:opacity-50"
                   >
-                    {isVerifying ? (language === 'da' ? 'Tjekker...' : 'Checking...') : t.confirmAccess}
+                    {isVerifying ? (language === 'da' ? 'Validerer...' : 'Validating...') : t.confirmAccess}
                   </button>
                 </form>
               )}

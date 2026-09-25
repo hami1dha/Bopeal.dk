@@ -7,11 +7,17 @@ import {
   Check, 
   KeyRound, 
   AlertCircle, 
-  Globe2
+  Globe2,
+  Lock
 } from 'lucide-react';
 import { STRIPE_PAYMENT_LINK } from '../data/housingData';
 import { Language } from '../types';
 import { Housing3DBackground } from './Housing3DBackground';
+import { 
+  isValidAccessCode, 
+  isValidStripeSessionId, 
+  saveAuthorizedAccess 
+} from '../utils/accessControl';
 
 interface EntrancePaywallProps {
   language: Language;
@@ -26,24 +32,42 @@ export const EntrancePaywall: React.FC<EntrancePaywallProps> = ({
 }) => {
   const [isVerifying, setIsVerifying] = useState(false);
   const [showAlreadyPaid, setShowAlreadyPaid] = useState(false);
-  const [emailInput, setEmailInput] = useState('');
+  const [accessInput, setAccessInput] = useState('');
   const [verifyError, setVerifyError] = useState('');
 
-  const handleVerifyEmail = (e: React.FormEvent) => {
+  const handleVerifyAccess = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!emailInput || !emailInput.includes('@')) {
+    const clean = accessInput.trim();
+    if (!clean) {
       setVerifyError(
         language === 'da'
-          ? 'Indtast venligst den e-mailadresse, du benyttede hos Stripe.'
-          : 'Please enter the email address used for your Stripe purchase.'
+          ? 'Indtast venligst din medlemskode eller Stripe-reference.'
+          : 'Please enter your member code or Stripe session reference.'
       );
       return;
     }
+
     setIsVerifying(true);
+    setVerifyError('');
+
     setTimeout(() => {
-      setIsVerifying(false);
-      onUnlockSuccess();
-    }, 500);
+      if (isValidAccessCode(clean)) {
+        saveAuthorizedAccess('access_code', clean);
+        setIsVerifying(false);
+        onUnlockSuccess();
+      } else if (isValidStripeSessionId(clean)) {
+        saveAuthorizedAccess('stripe_session', clean);
+        setIsVerifying(false);
+        onUnlockSuccess();
+      } else {
+        setIsVerifying(false);
+        setVerifyError(
+          language === 'da'
+            ? 'Ugyldig adgangskode eller Stripe-reference. Gennemfør betalingen via Stripe for at få adgang.'
+            : 'Invalid code or reference. Please complete payment via Stripe to get access.'
+        );
+      }
+    }, 400);
   };
 
   const content = language === 'da' ? {
@@ -65,10 +89,11 @@ export const EntrancePaywall: React.FC<EntrancePaywallProps> = ({
     cancelAnytime: 'Opsig når som helst',
     ctaButton: 'Lås op med Stripe',
     securityText: 'Sikker betaling krypteret via Stripe. Opsig når som helst.',
-    alreadyPaidLink: 'Har du allerede betalt? – Bekræft adgang',
-    alreadyPaidHelp: 'Indtast din Stripe e-mailadresse for at bekræfte din adgang:',
-    confirmButton: 'Bekræft adgang',
-    verifyingText: 'Bekræfter...',
+    alreadyPaidLink: 'Har du allerede betalt? – Lås op med medlemskode',
+    alreadyPaidHelp: 'Indtast den medlemskode du modtog efter Stripe-betalingen (f.eks. BOPÆL2026) eller dit Stripe sessions-ID:',
+    placeholder: 'F.eks. BOPÆL2026 eller cs_live_...',
+    confirmButton: 'Valider & Lås op',
+    verifyingText: 'Validerer adgang...',
     switchLang: 'In English',
     rights: 'Alle rettigheder forbeholdes.',
   } : {
@@ -90,10 +115,11 @@ export const EntrancePaywall: React.FC<EntrancePaywallProps> = ({
     cancelAnytime: 'Cancel anytime',
     ctaButton: 'Unlock with Stripe',
     securityText: 'Secure payment encrypted via Stripe. Cancel anytime.',
-    alreadyPaidLink: 'Already paid? – Confirm access',
-    alreadyPaidHelp: 'Enter your Stripe email address to confirm your access:',
-    confirmButton: 'Confirm access',
-    verifyingText: 'Verifying...',
+    alreadyPaidLink: 'Already paid? – Unlock with member code',
+    alreadyPaidHelp: 'Enter the member code received after Stripe checkout (e.g. BOPÆL2026) or your Stripe session ID:',
+    placeholder: 'E.g. BOPÆL2026 or cs_live_...',
+    confirmButton: 'Validate & Unlock',
+    verifyingText: 'Validating access...',
     switchLang: 'Dansk',
     rights: 'All rights reserved.',
   };
@@ -234,7 +260,7 @@ export const EntrancePaywall: React.FC<EntrancePaywallProps> = ({
                       <motion.form
                         initial={{ opacity: 0, y: -4 }}
                         animate={{ opacity: 1, y: 0 }}
-                        onSubmit={handleVerifyEmail}
+                        onSubmit={handleVerifyAccess}
                         className="space-y-2 text-left"
                       >
                         <p className="text-[11px] text-slate-300">
@@ -242,11 +268,11 @@ export const EntrancePaywall: React.FC<EntrancePaywallProps> = ({
                         </p>
                         <div className="flex gap-2">
                           <input
-                            type="email"
-                            placeholder="din-email@adresse.dk"
-                            value={emailInput}
+                            type="text"
+                            placeholder={content.placeholder}
+                            value={accessInput}
                             onChange={(e) => {
-                              setEmailInput(e.target.value);
+                              setAccessInput(e.target.value);
                               setVerifyError('');
                             }}
                             className="flex-1 text-xs px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500"

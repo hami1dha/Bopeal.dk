@@ -19,10 +19,15 @@ import { HousingCard } from './components/HousingCard';
 import { HousingGuideModal } from './components/HousingGuideModal';
 import { PaywallModal } from './components/PaywallModal';
 import { EntrancePaywall } from './components/EntrancePaywall';
+import { 
+  getStoredAuthState, 
+  clearAuthorizedAccess, 
+  evaluateUrlParameters,
+  saveAuthorizedAccess
+} from './utils/accessControl';
 
 const STORAGE_KEY_FAVORITES = 'boligguide_favorites_v1';
 const STORAGE_KEY_LANG = 'boligguide_lang';
-const STORAGE_KEY_UNLOCKED = 'boligguide_unlocked_v1';
 
 export default function App() {
   const [language, setLanguage] = useState<Language>(() => {
@@ -31,21 +36,7 @@ export default function App() {
   });
 
   const [isUnlocked, setIsUnlocked] = useState<boolean>(() => {
-    try {
-      const params = new URLSearchParams(window.location.search);
-      if (
-        params.get('unlocked') === 'true' || 
-        params.get('paid') === 'true' || 
-        params.get('session_id') ||
-        params.get('success') === 'true'
-      ) {
-        localStorage.setItem(STORAGE_KEY_UNLOCKED, 'true');
-        return true;
-      }
-      return localStorage.getItem(STORAGE_KEY_UNLOCKED) === 'true';
-    } catch {
-      return false;
-    }
+    return getStoredAuthState().isUnlocked;
   });
 
   const [showPaywallModal, setShowPaywallModal] = useState<boolean>(false);
@@ -67,23 +58,34 @@ export default function App() {
 
   const t = translations[language];
 
-  // Auto-detect returning from Stripe payment link
+  // Evaluate URL parameters securely (valid Stripe session_id or access key ONLY, rejects ?success=true)
   useEffect(() => {
-    try {
-      const params = new URLSearchParams(window.location.search);
-      if (
-        params.get('unlocked') === 'true' || 
-        params.get('paid') === 'true' || 
-        params.get('session_id') ||
-        params.get('success') === 'true'
-      ) {
-        showToast(t.accessGrantedToast);
-        window.history.replaceState({}, document.title, window.location.pathname);
+    const result = evaluateUrlParameters();
+    if (result.authorized) {
+      setIsUnlocked(true);
+      showToast(t.accessGrantedToast);
+      window.history.replaceState({}, document.title, window.location.pathname);
+    } else if (result.blocked) {
+      if (result.reason === 'bypass_attempt') {
+        showToast(
+          language === 'da'
+            ? '⛔ Adgang afvist: ?success=true er blokeret. Gyldig Stripe-betaling påkrævet.'
+            : '⛔ Access denied: ?success=true is blocked. Valid Stripe checkout required.'
+        );
+      } else if (result.reason === 'invalid_session_id') {
+        showToast(
+          language === 'da'
+            ? '⛔ Ugyldig Stripe-session. Betalingen kunne ikke verificeres.'
+            : '⛔ Invalid Stripe session. Payment could not be verified.'
+        );
+      } else if (result.reason === 'invalid_code') {
+        showToast(
+          language === 'da' ? '⛔ Ugyldig adgangskode.' : '⛔ Invalid access code.'
+        );
       }
-    } catch {
-      // ignore
+      window.history.replaceState({}, document.title, window.location.pathname);
     }
-  }, [t.accessGrantedToast]);
+  }, [language, t.accessGrantedToast]);
 
   // Save language changes
   const handleToggleLanguage = () => {
@@ -112,14 +114,13 @@ export default function App() {
 
   const handleUnlockSuccess = () => {
     setIsUnlocked(true);
-    localStorage.setItem(STORAGE_KEY_UNLOCKED, 'true');
     setShowPaywallModal(false);
     showToast(t.accessGrantedToast);
   };
 
   const handleLockApp = () => {
     setIsUnlocked(false);
-    localStorage.removeItem(STORAGE_KEY_UNLOCKED);
+    clearAuthorizedAccess();
     showToast(language === 'da' ? 'Adgang låst' : 'Access locked');
   };
 
