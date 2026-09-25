@@ -104,15 +104,23 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
               </button>
             )}
 
-            <div className="flex items-center gap-2 mb-3">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                <Lock className="w-3.5 h-3.5" />
-                {t.subscriptionActive}
-              </span>
-              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-white/10 text-slate-200">
-                <Sparkles className="w-3 h-3 text-amber-300" />
-                {totalPortalsCount} Portaler
-              </span>
+            <div className="flex items-center gap-3 mb-3">
+              <img 
+                src="/src/assets/images/bopael_app_icon_1790346411387.jpg" 
+                alt="bopæl.dk logo" 
+                referrerPolicy="no-referrer"
+                className="w-8 h-8 rounded-lg object-cover shadow-sm ring-1 ring-white/20"
+              />
+              <div className="flex items-center gap-2">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                  <Lock className="w-3.5 h-3.5" />
+                  {t.subscriptionActive}
+                </span>
+                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-white/10 text-slate-200">
+                  <Sparkles className="w-3 h-3 text-amber-300" />
+                  {totalPortalsCount} Portaler
+                </span>
+              </div>
             </div>
 
             <h2 id="paywall-heading" className="text-2xl sm:text-3xl font-bold tracking-tight text-white mb-3">

@@ -133,9 +133,12 @@ export const EntrancePaywall: React.FC<EntrancePaywallProps> = ({
       <header className="relative z-20 border-b border-white/10 bg-slate-950/60 backdrop-blur-md sticky top-0">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center font-black text-white text-base shadow-lg shadow-blue-500/20">
-              b
-            </div>
+            <img 
+              src="/src/assets/images/bopael_app_icon_1790346411387.jpg" 
+              alt="bopæl.dk logo" 
+              referrerPolicy="no-referrer"
+              className="w-9 h-9 rounded-xl object-cover shadow-lg shadow-blue-500/20 ring-1 ring-white/20"
+            />
             <span className="font-extrabold text-lg tracking-tight text-white drop-shadow-sm">
               bopæl.dk
             </span>

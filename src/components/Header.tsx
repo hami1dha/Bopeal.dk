@@ -44,9 +44,12 @@ export const Header: React.FC<HeaderProps> = ({
         {/* Brand & Title */}
         <div className="flex items-center gap-3 w-full md:w-auto justify-between md:justify-start">
           <div className="flex items-center gap-2.5">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-blue-500/20 shrink-0">
-              <Building2 className="w-5 h-5" />
-            </div>
+            <img 
+              src="/src/assets/images/bopael_app_icon_1790346411387.jpg" 
+              alt="bopæl.dk logo" 
+              referrerPolicy="no-referrer"
+              className="w-10 h-10 rounded-xl object-cover shadow-md shadow-blue-500/20 shrink-0 border border-slate-700/60"
+            />
             <div>
               <div className="flex items-center gap-2">
                 <span className="text-xs font-semibold uppercase tracking-wider text-blue-400">
