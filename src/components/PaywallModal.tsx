@@ -15,6 +15,7 @@ import {
 import { STRIPE_PAYMENT_LINK, housingCategories } from '../data/housingData';
 import { translations } from '../data/translations';
 import { Language } from '../types';
+import { BOPEL_LOGO, BOPEL_FALLBACK_LOGO } from '../assets/logo';
 import { 
   isValidAccessCode, 
   isValidStripeSessionId, 
@@ -106,7 +107,10 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
 
             <div className="flex items-center gap-3 mb-3">
               <img 
-                src="/src/assets/images/bopael_visible_icon_1790508825247.jpg" 
+                src={BOPEL_LOGO} 
+                onError={(e) => {
+                  (e.currentTarget as HTMLImageElement).src = BOPEL_FALLBACK_LOGO;
+                }}
                 alt="bopæl.dk logo" 
                 referrerPolicy="no-referrer"
                 className="w-10 h-10 rounded-xl object-contain bg-white shadow-xl shadow-blue-500/30 ring-2 ring-white/90 shrink-0"

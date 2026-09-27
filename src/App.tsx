@@ -13,6 +13,7 @@ import {
 import { housingCategories } from './data/housingData';
 import { translations } from './data/translations';
 import { Language, HousingTag } from './types';
+import { BOPEL_LOGO, BOPEL_FALLBACK_LOGO } from './assets/logo';
 import { Header } from './components/Header';
 import { CategorySidebar } from './components/CategorySidebar';
 import { HousingCard } from './components/HousingCard';
@@ -478,7 +479,10 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6 text-xs sm:text-sm">
           <div className="flex items-center gap-3">
             <img 
-              src="/src/assets/images/bopael_visible_icon_1790508825247.jpg" 
+              src={BOPEL_LOGO} 
+              onError={(e) => {
+                (e.currentTarget as HTMLImageElement).src = BOPEL_FALLBACK_LOGO;
+              }}
               alt="bopæl.dk logo" 
               referrerPolicy="no-referrer"
               className="w-8 h-8 rounded-lg object-contain bg-white shadow-md ring-2 ring-white/90 shrink-0" 

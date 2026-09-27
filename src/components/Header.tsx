@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { Language } from '../types';
 import { translations } from '../data/translations';
+import { BOPEL_LOGO, BOPEL_FALLBACK_LOGO } from '../assets/logo';
 
 interface HeaderProps {
   language: Language;
@@ -46,7 +47,10 @@ export const Header: React.FC<HeaderProps> = ({
           <div className="flex items-center gap-2.5">
             <div className="relative shrink-0">
               <img 
-                src="/src/assets/images/bopael_visible_icon_1790508825247.jpg" 
+                src={BOPEL_LOGO} 
+                onError={(e) => {
+                  (e.currentTarget as HTMLImageElement).src = BOPEL_FALLBACK_LOGO;
+                }}
                 alt="bopæl.dk logo" 
                 referrerPolicy="no-referrer"
                 className="w-10 h-10 rounded-xl object-contain bg-white shadow-xl shadow-blue-500/25 ring-2 ring-white/90 shrink-0"

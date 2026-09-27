@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { STRIPE_PAYMENT_LINK } from '../data/housingData';
 import { Language } from '../types';
+import { BOPEL_LOGO, BOPEL_FALLBACK_LOGO } from '../assets/logo';
 import { Housing3DBackground } from './Housing3DBackground';
 import { 
   isValidAccessCode, 
@@ -135,7 +136,10 @@ export const EntrancePaywall: React.FC<EntrancePaywallProps> = ({
           <div className="flex items-center gap-3">
             <div className="relative shrink-0">
               <img 
-                src="/src/assets/images/bopael_visible_icon_1790508825247.jpg" 
+                src={BOPEL_LOGO} 
+                onError={(e) => {
+                  (e.currentTarget as HTMLImageElement).src = BOPEL_FALLBACK_LOGO;
+                }}
                 alt="bopæl.dk logo" 
                 referrerPolicy="no-referrer"
                 className="w-10 h-10 rounded-xl object-contain bg-white shadow-xl shadow-blue-500/30 ring-2 ring-white/90 shrink-0"
