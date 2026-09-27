@@ -233,9 +233,9 @@ export default function App() {
     return (
       <>
         {toastMessage && (
-          <div className="fixed bottom-6 right-6 z-50 bg-slate-900 text-white text-xs sm:text-sm px-4 py-3 rounded-xl shadow-xl border border-slate-700 flex items-center gap-2 animate-bounce">
+          <div className="fixed bottom-6 right-6 z-50 bg-slate-900/95 text-white text-xs sm:text-sm px-4 py-3 rounded-xl shadow-2xl border border-slate-700 flex items-center gap-2 backdrop-blur-md animate-bounce">
             <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-            <span>{toastMessage}</span>
+            <span className="font-medium">{toastMessage}</span>
           </div>
         )}
         <EntrancePaywall
@@ -249,12 +249,12 @@ export default function App() {
 
   // UNLOCKED VIEW: Full database with all 97 portals, verified links, guides, and tools
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-800">
+    <div className="min-h-screen flex flex-col bg-slate-950 text-slate-100">
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 bg-slate-900 text-white text-xs sm:text-sm px-4 py-3 rounded-xl shadow-xl border border-slate-700 flex items-center gap-2 animate-bounce">
+        <div className="fixed bottom-6 right-6 z-50 bg-slate-900/95 text-white text-xs sm:text-sm px-4 py-3 rounded-xl shadow-2xl border border-slate-700 flex items-center gap-2 backdrop-blur-md animate-bounce">
           <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-          <span>{toastMessage}</span>
+          <span className="font-medium">{toastMessage}</span>
         </div>
       )}
 
@@ -271,8 +271,8 @@ export default function App() {
         onLockApp={handleLockApp}
       />
 
-      {/* Unlocked Member Dashboard Banner */}
-      <div className="bg-gradient-to-r from-blue-900 via-slate-900 to-indigo-950 text-white py-8 px-4 sm:px-6 lg:px-8 relative overflow-hidden border-b border-slate-800">
+      {/* Unlocked Member Dashboard Banner - Dark Cinematic */}
+      <div className="bg-gradient-to-r from-slate-950 via-blue-950 to-slate-900 text-white py-8 px-4 sm:px-6 lg:px-8 relative overflow-hidden border-b border-slate-800 shadow-md">
         <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
@@ -299,15 +299,15 @@ export default function App() {
 
             {/* Quick stats pills */}
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 w-full md:w-auto">
-              <div className="bg-white/10 backdrop-blur-sm border border-white/10 p-3 rounded-xl">
+              <div className="bg-white/10 backdrop-blur-sm border border-white/15 p-3 rounded-xl">
                 <div className="text-xl sm:text-2xl font-black text-white">{totalPortalsCount}</div>
                 <div className="text-xs text-slate-300 font-medium">{t.statsPortals}</div>
               </div>
-              <div className="bg-white/10 backdrop-blur-sm border border-white/10 p-3 rounded-xl">
+              <div className="bg-white/10 backdrop-blur-sm border border-white/15 p-3 rounded-xl">
                 <div className="text-xl sm:text-2xl font-black text-white">{housingCategories.length}</div>
                 <div className="text-xs text-slate-300 font-medium">{t.categories}</div>
               </div>
-              <div className="bg-white/10 backdrop-blur-sm border border-white/10 p-3 rounded-xl col-span-2 sm:col-span-1">
+              <div className="bg-white/10 backdrop-blur-sm border border-white/15 p-3 rounded-xl col-span-2 sm:col-span-1">
                 <div className="text-xl sm:text-2xl font-black text-emerald-400">100%</div>
                 <div className="text-xs text-slate-300 font-medium">{language === 'da' ? 'Oplåst' : 'Unlocked'}</div>
               </div>
@@ -338,13 +338,13 @@ export default function App() {
           {/* Right Content Area */}
           <main id="content-area" className="space-y-8 min-w-0">
             {/* Filter Summary Bar */}
-            <div className="flex flex-wrap items-center justify-between gap-3 bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
-              <div className="text-xs sm:text-sm font-semibold text-slate-700">
+            <div className="flex flex-wrap items-center justify-between gap-3 bg-slate-900 p-4 rounded-xl border border-slate-800 shadow-xs text-slate-200">
+              <div className="text-xs sm:text-sm font-semibold text-slate-300">
                 {t.showingResults
                   .replace('{count}', String(visiblePortalsCount))
                   .replace('{total}', String(totalPortalsCount))}
                 {selectedTag !== 'all' && (
-                  <span className="ml-2 font-normal text-slate-500">
+                  <span className="ml-2 font-normal text-slate-400">
                     ({language === 'da' ? 'Filter aktivt' : 'Filter active'})
                   </span>
                 )}
@@ -358,7 +358,7 @@ export default function App() {
                     setSelectedTag('all');
                     setActiveCategoryId(null);
                   }}
-                  className="text-xs font-semibold text-blue-600 hover:text-blue-800 underline"
+                  className="text-xs font-semibold text-blue-400 hover:text-blue-300 underline"
                 >
                   {t.clearFilters}
                 </button>
@@ -367,14 +367,14 @@ export default function App() {
 
             {/* No Results Fallback */}
             {filteredCategories.length === 0 && (
-              <div className="bg-white rounded-2xl p-12 text-center border border-slate-200 shadow-sm space-y-4">
-                <div className="w-12 h-12 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mx-auto">
+              <div className="bg-slate-900 rounded-2xl p-12 text-center border border-slate-800 shadow-sm space-y-4 text-white">
+                <div className="w-12 h-12 rounded-full bg-slate-800 text-slate-400 flex items-center justify-center mx-auto">
                   <Search className="w-6 h-6" />
                 </div>
-                <h3 className="text-lg font-bold text-slate-800">
+                <h3 className="text-lg font-bold text-white">
                   {t.noResults}
                 </h3>
-                <p className="text-sm text-slate-500 max-w-md mx-auto">
+                <p className="text-sm text-slate-400 max-w-md mx-auto">
                   {language === 'da' 
                     ? 'Prøv at søge efter en anden by (f.eks. København, Aarhus, Odense) eller nulstil dine filtre.'
                     : 'Try searching for another city (e.g. Copenhagen, Aarhus) or reset your filter pills.'}
@@ -386,7 +386,7 @@ export default function App() {
                     setSelectedTag('all');
                     setActiveCategoryId(null);
                   }}
-                  className="px-4 py-2 bg-slate-900 text-white text-xs font-semibold rounded-lg hover:bg-slate-800 transition-colors"
+                  className="px-4 py-2 bg-blue-600 text-white text-xs font-semibold rounded-lg hover:bg-blue-500 transition-colors"
                 >
                   {t.clearFilters}
                 </button>
@@ -401,17 +401,17 @@ export default function App() {
                 className="scroll-mt-28 space-y-4"
               >
                 {/* Category Header */}
-                <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="bg-slate-900 rounded-xl p-5 border border-slate-800 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-white">
                   <div>
-                    <h2 className="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
-                      <span className="text-blue-600 font-mono">#{category.categoryNumber}</span>
+                    <h2 className="text-lg sm:text-xl font-bold text-white flex items-center gap-2">
+                      <span className="text-blue-400 font-mono">#{category.categoryNumber}</span>
                       <span>{category.title[language]}</span>
                     </h2>
-                    <p className="text-xs sm:text-sm text-slate-600 mt-1 leading-relaxed">
+                    <p className="text-xs sm:text-sm text-slate-300 mt-1 leading-relaxed">
                       {category.description[language]}
                     </p>
                   </div>
-                  <div className="shrink-0 text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 border border-slate-200/60 self-start sm:self-center">
+                  <div className="shrink-0 text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-800 text-slate-300 border border-slate-700 self-start sm:self-center">
                     {category.items.length} {language === 'da' ? 'portaler' : 'portals'}
                   </div>
                 </div>
@@ -435,16 +435,16 @@ export default function App() {
             ))}
 
             {/* Unlocked Member FAQ */}
-            <section className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-xs space-y-6">
-              <div className="flex items-center gap-2 text-xs font-semibold text-blue-600 uppercase tracking-wider">
+            <section className="bg-slate-900 rounded-2xl p-6 sm:p-8 border border-slate-800 shadow-xs space-y-6 text-white">
+              <div className="flex items-center gap-2 text-xs font-semibold text-blue-400 uppercase tracking-wider">
                 <HelpCircle className="w-4 h-4" />
                 <span>FAQ & Hjælp</span>
               </div>
-              <h3 className="text-xl font-bold text-slate-900">
+              <h3 className="text-xl font-bold text-white">
                 {language === 'da' ? 'Gode råd til din boligsøgning' : 'Tips for your housing search'}
               </h3>
 
-              <div className="divide-y divide-slate-100">
+              <div className="divide-y divide-slate-800">
                 {memberFaqs.map((faq, idx) => {
                   const isOpen = openFaqIndex === idx;
                   return (
@@ -452,15 +452,15 @@ export default function App() {
                       <button
                         type="button"
                         onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
-                        className="w-full text-left flex items-center justify-between gap-4 text-sm font-semibold text-slate-900 hover:text-blue-600 transition-colors"
+                        className="w-full text-left flex items-center justify-between gap-4 text-sm font-semibold text-white hover:text-blue-400 transition-colors"
                       >
                         <span>{faq.q}</span>
                         <ChevronDown
-                          className={`w-4 h-4 text-slate-400 transition-transform ${isOpen ? 'rotate-180 text-blue-600' : ''}`}
+                          className={`w-4 h-4 text-slate-400 transition-transform ${isOpen ? 'rotate-180 text-blue-400' : ''}`}
                         />
                       </button>
                       {isOpen && (
-                        <p className="text-xs sm:text-sm text-slate-600 mt-2 leading-relaxed pl-1">
+                        <p className="text-xs sm:text-sm text-slate-300 mt-2 leading-relaxed pl-1">
                           {faq.a}
                         </p>
                       )}
@@ -474,12 +474,15 @@ export default function App() {
       </div>
 
       {/* Footer */}
-      <footer className="bg-slate-900 text-slate-400 py-10 border-t border-slate-800 mt-auto">
+      <footer className="bg-slate-950 text-slate-400 py-10 border-t border-slate-800 mt-auto">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6 text-xs sm:text-sm">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white font-bold">
-              <Building2 className="w-4 h-4" />
-            </div>
+            <img 
+              src="/src/assets/images/bopael_visible_icon_1790508825247.jpg" 
+              alt="bopæl.dk logo" 
+              referrerPolicy="no-referrer"
+              className="w-8 h-8 rounded-lg object-contain bg-white shadow-md ring-2 ring-white/90 shrink-0" 
+            />
             <div>
               <p className="text-white font-semibold">{t.brandName}</p>
               <p className="text-xs text-slate-500">

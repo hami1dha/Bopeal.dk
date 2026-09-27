@@ -126,11 +126,11 @@ export const Housing3DBackground: React.FC<Housing3DBackgroundProps> = () => {
     const facadeMaterials = [
       new THREE.MeshStandardMaterial({ color: 0xc25b3f, roughness: 0.65, metalness: 0.15 }), // Red Nordic Brick
       new THREE.MeshStandardMaterial({ color: 0xe07a5f, roughness: 0.65, metalness: 0.15 }), // Warm Terracotta
-      new THREE.MeshStandardMaterial({ color: 0x243042, roughness: 0.5, metalness: 0.4 }),  // Deep Anthracite Slate
-      new THREE.MeshStandardMaterial({ color: 0x3d4b60, roughness: 0.55, metalness: 0.35 }), // Modern Blue-Grey
-      new THREE.MeshStandardMaterial({ color: 0x8c7866, roughness: 0.7, metalness: 0.2 }),  // Danish Sandstone Brick
-      new THREE.MeshStandardMaterial({ color: 0xf1f5f9, roughness: 0.4, metalness: 0.2 }),  // Clean White Render
-      new THREE.MeshStandardMaterial({ color: 0xb45309, roughness: 0.75, metalness: 0.1 }), // Warm Timber Cladding
+      new THREE.MeshStandardMaterial({ color: 0x243042, roughness: 0.5, metalness: 0.4 }),   // Deep Anthracite Slate
+      new THREE.MeshStandardMaterial({ color: 0x3d4b60, roughness: 0.55, metalness: 0.35 }),  // Modern Blue-Grey
+      new THREE.MeshStandardMaterial({ color: 0x8c7866, roughness: 0.7, metalness: 0.2 }),   // Danish Sandstone Brick
+      new THREE.MeshStandardMaterial({ color: 0xf1f5f9, roughness: 0.4, metalness: 0.2 }),   // Clean White Render
+      new THREE.MeshStandardMaterial({ color: 0xb45309, roughness: 0.75, metalness: 0.1 }),  // Warm Timber Cladding
     ];
 
     // Ultra-bright Glowing Windows

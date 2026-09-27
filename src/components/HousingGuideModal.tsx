@@ -112,10 +112,10 @@ export const HousingGuideModal: React.FC<HousingGuideModalProps> = ({
           initial={{ opacity: 0, scale: 0.95, y: 15 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 15 }}
-          className="relative w-full max-w-3xl bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden my-8"
+          className="relative w-full max-w-3xl bg-slate-900 rounded-2xl shadow-2xl border border-slate-800 overflow-hidden my-8 text-white"
         >
-          {/* Header */}
-          <div className="bg-slate-900 text-white p-6 sm:p-7 flex items-start justify-between border-b border-slate-800">
+          {/* Header - Dark Theme */}
+          <div className="bg-gradient-to-r from-slate-950 via-blue-950 to-slate-900 text-white p-6 sm:p-7 flex items-start justify-between border-b border-slate-800">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-blue-600/20 text-blue-400 border border-blue-500/30 flex items-center justify-center shrink-0">
                 <BookOpen className="w-5 h-5" />
@@ -133,7 +133,7 @@ export const HousingGuideModal: React.FC<HousingGuideModalProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="text-slate-400 hover:text-white p-2 rounded-lg bg-slate-800 hover:bg-slate-700 transition-colors"
+              className="text-slate-400 hover:text-white p-2 rounded-lg bg-slate-800/80 hover:bg-slate-700 transition-colors"
               aria-label={t.close}
             >
               <X className="w-5 h-5" />
@@ -141,29 +141,29 @@ export const HousingGuideModal: React.FC<HousingGuideModalProps> = ({
           </div>
 
           {/* Guide Sections */}
-          <div className="p-6 sm:p-8 space-y-6 max-h-[70vh] overflow-y-auto">
+          <div className="p-6 sm:p-8 space-y-6 max-h-[70vh] overflow-y-auto bg-slate-900">
             {sections.map((sec, idx) => (
               <div 
                 key={idx} 
-                className="bg-slate-50/80 rounded-xl p-5 border border-slate-200/80 hover:border-slate-300 transition-colors"
+                className="bg-slate-950/80 rounded-xl p-5 border border-slate-800/90 transition-colors"
               >
                 <div className="flex items-center gap-2.5 mb-2.5">
-                  <div className="p-2 rounded-lg bg-white shadow-xs border border-slate-200/60">
+                  <div className="p-2 rounded-lg bg-slate-900 border border-slate-700">
                     {sec.icon}
                   </div>
-                  <h4 className="font-bold text-slate-900 text-base">
+                  <h4 className="font-bold text-white text-base">
                     {sec.title}
                   </h4>
                 </div>
 
-                <p className="text-sm text-slate-600 leading-relaxed mb-3">
+                <p className="text-sm text-slate-300 leading-relaxed mb-3">
                   {sec.text}
                 </p>
 
                 <ul className="space-y-1.5 pl-1">
                   {sec.bullets.map((bullet, bIdx) => (
-                    <li key={bIdx} className="flex items-start gap-2 text-xs sm:text-sm text-slate-700">
-                      <CheckCircle className="w-4 h-4 text-emerald-600 mt-0.5 shrink-0" />
+                    <li key={bIdx} className="flex items-start gap-2 text-xs sm:text-sm text-slate-400">
+                      <CheckCircle className="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" />
                       <span>{bullet}</span>
                     </li>
                   ))}

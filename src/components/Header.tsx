@@ -38,24 +38,27 @@ export const Header: React.FC<HeaderProps> = ({
   const t = translations[language];
 
   return (
-    <header id="main-header" className="bg-slate-900 text-white border-b border-slate-800 sticky top-0 z-30 shadow-md">
+    <header id="main-header" className="bg-slate-900/95 backdrop-blur-md text-white border-b border-slate-800 sticky top-0 z-30 shadow-md">
       {/* Top Banner Bar */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-col md:flex-row items-center justify-between gap-3">
         {/* Brand & Title */}
         <div className="flex items-center gap-3 w-full md:w-auto justify-between md:justify-start">
           <div className="flex items-center gap-2.5">
-            <img 
-              src="/src/assets/images/bopael_app_icon_1790346411387.jpg" 
-              alt="bopæl.dk logo" 
-              referrerPolicy="no-referrer"
-              className="w-10 h-10 rounded-xl object-cover shadow-md shadow-blue-500/20 shrink-0 border border-slate-700/60"
-            />
+            <div className="relative shrink-0">
+              <img 
+                src="/src/assets/images/bopael_visible_icon_1790508825247.jpg" 
+                alt="bopæl.dk logo" 
+                referrerPolicy="no-referrer"
+                className="w-10 h-10 rounded-xl object-contain bg-white shadow-xl shadow-blue-500/25 ring-2 ring-white/90 shrink-0"
+              />
+              <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-400 border-2 border-slate-900 rounded-full" />
+            </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-xs font-semibold uppercase tracking-wider text-blue-400">
+                <span className="text-xs font-bold uppercase tracking-wider text-blue-400">
                   {t.brandName}
                 </span>
-                <span className="hidden sm:inline-block text-[10px] px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700 font-mono">
+                <span className="hidden sm:inline-block text-[10px] px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700 font-mono font-semibold">
                   {totalPortalsCount} Portaler
                 </span>
               </div>
@@ -134,7 +137,7 @@ export const Header: React.FC<HeaderProps> = ({
       </div>
 
       {/* Search Bar Subheader */}
-      <div className="bg-slate-950/70 border-t border-slate-800/80 py-3 px-4 sm:px-6 lg:px-8">
+      <div className="bg-slate-950/80 border-t border-slate-800/80 py-3 px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl mx-auto relative">
           <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
           <input

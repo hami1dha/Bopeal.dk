@@ -125,23 +125,31 @@ export const EntrancePaywall: React.FC<EntrancePaywallProps> = ({
   };
 
   return (
-    <div className="relative min-h-screen bg-transparent text-slate-100 flex flex-col font-sans selection:bg-blue-600 selection:text-white overflow-hidden">
+    <div className="relative min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-blue-600 selection:text-white overflow-hidden">
       {/* 3D Animated Cinematic Background */}
       <Housing3DBackground />
 
       {/* Minimal Header with Logo and Language Toggle */}
-      <header className="relative z-20 border-b border-white/10 bg-slate-950/60 backdrop-blur-md sticky top-0">
+      <header className="relative z-20 border-b border-white/10 bg-slate-950/75 backdrop-blur-md sticky top-0 shadow-md">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <img 
-              src="/src/assets/images/bopael_app_icon_1790346411387.jpg" 
-              alt="bopæl.dk logo" 
-              referrerPolicy="no-referrer"
-              className="w-9 h-9 rounded-xl object-cover shadow-lg shadow-blue-500/20 ring-1 ring-white/20"
-            />
-            <span className="font-extrabold text-lg tracking-tight text-white drop-shadow-sm">
-              bopæl.dk
-            </span>
+            <div className="relative shrink-0">
+              <img 
+                src="/src/assets/images/bopael_visible_icon_1790508825247.jpg" 
+                alt="bopæl.dk logo" 
+                referrerPolicy="no-referrer"
+                className="w-10 h-10 rounded-xl object-contain bg-white shadow-xl shadow-blue-500/30 ring-2 ring-white/90 shrink-0"
+              />
+              <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-400 border-2 border-slate-950 rounded-full" />
+            </div>
+            <div className="flex flex-col">
+              <span className="font-extrabold text-lg tracking-tight text-white drop-shadow-sm leading-none">
+                bopæl.dk
+              </span>
+              <span className="text-[10px] uppercase font-bold tracking-wider text-cyan-400 mt-1">
+                Danmarks Boligguide
+              </span>
+            </div>
           </div>
 
           <div className="flex items-center gap-3">
@@ -158,13 +166,13 @@ export const EntrancePaywall: React.FC<EntrancePaywallProps> = ({
         </div>
       </header>
 
-      {/* Main Screen: Only the exact requested content */}
+      {/* Main Screen: Cinematic Glass Card in Dark Theme */}
       <main className="relative z-10 flex-1 flex items-center justify-center px-4 sm:px-6 py-10 sm:py-16">
         <div className="max-w-4xl w-full">
           {/* Main Glass Card */}
-          <div className="relative overflow-hidden rounded-3xl bg-slate-950/75 backdrop-blur-xl border border-white/20 shadow-2xl p-6 sm:p-10 lg:p-12">
-            <div className="absolute top-0 right-0 w-80 h-80 bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
-            <div className="absolute bottom-0 left-0 w-80 h-80 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="relative overflow-hidden rounded-3xl bg-slate-950/80 backdrop-blur-2xl border border-white/15 shadow-2xl p-6 sm:p-10 lg:p-12">
+            <div className="absolute top-0 right-0 w-80 h-80 bg-blue-600/15 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute bottom-0 left-0 w-80 h-80 bg-cyan-600/10 rounded-full blur-3xl pointer-events-none" />
 
             <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
               {/* Left Column: Heading, Description & Features */}
@@ -202,7 +210,7 @@ export const EntrancePaywall: React.FC<EntrancePaywallProps> = ({
 
               {/* Right Column: Exact Payment Card */}
               <div className="lg:col-span-5">
-                <div className="rounded-2xl bg-gradient-to-b from-slate-800 to-slate-900 border border-slate-700 p-6 sm:p-7 shadow-2xl space-y-5">
+                <div className="rounded-2xl bg-gradient-to-b from-slate-800/90 to-slate-900 border border-slate-700/80 p-6 sm:p-7 shadow-2xl space-y-5">
                   <div className="flex items-center justify-between pb-4 border-b border-slate-700/80">
                     <div>
                       <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
@@ -283,7 +291,7 @@ export const EntrancePaywall: React.FC<EntrancePaywallProps> = ({
                           <button
                             type="submit"
                             disabled={isVerifying}
-                            className="px-3 py-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-500 rounded-lg shrink-0 disabled:opacity-50"
+                            className="px-3 py-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-500 rounded-lg shrink-0 disabled:opacity-50 transition-colors"
                           >
                             {isVerifying ? content.verifyingText : content.confirmButton}
                           </button>
@@ -305,7 +313,7 @@ export const EntrancePaywall: React.FC<EntrancePaywallProps> = ({
       </main>
 
       {/* Footer */}
-      <footer className="relative z-10 border-t border-white/10 bg-slate-950/60 backdrop-blur-md py-6 text-center text-xs text-slate-400">
+      <footer className="relative z-10 border-t border-white/10 bg-slate-950/75 backdrop-blur-md py-6 text-center text-xs text-slate-400">
         <div className="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p>© {new Date().getFullYear()} bopæl.dk. {content.rights}</p>
           <div className="flex items-center gap-3 text-slate-400">
