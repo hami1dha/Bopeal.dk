@@ -20,6 +20,8 @@ import { HousingCard } from './components/HousingCard';
 import { HousingGuideModal } from './components/HousingGuideModal';
 import { PaywallModal } from './components/PaywallModal';
 import { EntrancePaywall } from './components/EntrancePaywall';
+import { LegalModal } from './components/LegalModal';
+import { COMPLIANCE_DATA, LegalSectionKey } from './data/legalAndCompliance';
 import { 
   getStoredAuthState, 
   clearAuthorizedAccess, 
@@ -42,6 +44,7 @@ export default function App() {
 
   const [showPaywallModal, setShowPaywallModal] = useState<boolean>(false);
   const [showGuideModal, setShowGuideModal] = useState<boolean>(false);
+  const [activeLegalModal, setActiveLegalModal] = useState<LegalSectionKey | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedTag, setSelectedTag] = useState<HousingTag | 'all' | 'favorites'>('all');
   const [activeCategoryId, setActiveCategoryId] = useState<string | null>(null);
@@ -200,34 +203,22 @@ export default function App() {
     return filteredCategories.reduce((acc, cat) => acc + cat.items.length, 0);
   }, [filteredCategories]);
 
-  // FAQs for unlocked members
-  const memberFaqs = language === 'da' ? [
-    {
-      q: 'Hvordan søger jeg mest effektivt i de 97 portaler?',
-      a: 'Start med de almene ventelister (#3) og kollegierne (#4) for de billigste boliger uden depositumsnyderi. Brug fritekstsøgningen øverst til at filtrere på din by (f.eks. København, Aarhus, Odense) eller tag-filtrene i venstre menu.'
-    },
-    {
-      q: 'Hvordan administrerer eller opsiger jeg mit abonnement?',
-      a: 'Dit abonnement koster 7 DKK / måned uden binding. Du kan til enhver tid opsige direkte via den e-mailkvittering, du modtog fra Stripe, eller kontakte vores support.'
-    },
-    {
-      q: 'Hvad gør jeg, hvis jeg skifter enhed eller browser?',
-      a: 'Du kan logge ind igen på enhver enhed ved at klikke på "Har du allerede betalt?" på forsiden og indtaste din Stripe-e-mailadresse.'
-    }
-  ] : [
-    {
-      q: 'How do I search most effectively among the 97 portals?',
-      a: 'Begin with non-profit housing associations (#3) and free student dorms (#4) for affordable housing without scam risks. Use the search bar for your city (e.g. Copenhagen, Aarhus) or the filter tags.'
-    },
-    {
-      q: 'How do I manage or cancel my 7 DKK / mo subscription?',
-      a: 'There is no lock-in. You can cancel anytime via the Stripe receipt in your inbox or by contacting support.'
-    },
-    {
-      q: 'What if I switch devices or clear my browser cache?',
-      a: 'Simply click "Already subscribed?" on the entrance paywall and enter your Stripe email to reactivate.'
-    }
-  ];
+  // FAQs for unlocked members (incorporating all compliance FAQs + search advice)
+  const memberFaqs = useMemo(() => {
+    const complianceFaqs = COMPLIANCE_DATA[language].faq.items;
+    const tips = language === 'da' ? [
+      {
+        q: 'Hvordan søger jeg mest effektivt i de 97 portaler?',
+        a: 'Start med de almene ventelister (#3) og kollegierne (#4) for de billigste boliger uden depositumsnyderi. Brug fritekstsøgningen øverst til at filtrere på din by (f.eks. København, Aarhus, Odense) eller tag-filtrene i venstre menu.'
+      }
+    ] : [
+      {
+        q: 'How do I search most effectively among the 97 portals?',
+        a: 'Begin with non-profit housing associations (#3) and free student dorms (#4) for affordable housing without scam risks. Use the search bar for your city (e.g. Copenhagen, Aarhus) or the filter tags.'
+      }
+    ];
+    return [...tips, ...complianceFaqs];
+  }, [language]);
 
   // STRICT PAYWALL GATE: When not paid/unlocked, EVERYTHING is hidden behind EntrancePaywall
   if (!isUnlocked) {
@@ -270,6 +261,7 @@ export default function App() {
         isUnlocked={isUnlocked}
         onOpenPaywall={() => setShowPaywallModal(true)}
         onLockApp={handleLockApp}
+        onOpenLegal={(sec) => setActiveLegalModal(sec)}
       />
 
       {/* Unlocked Member Dashboard Banner - Dark Cinematic */}
@@ -476,7 +468,7 @@ export default function App() {
 
       {/* Footer */}
       <footer className="bg-slate-950 text-slate-400 py-10 border-t border-slate-800 mt-auto">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6 text-xs sm:text-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center space-y-4 text-center">
           <div className="flex items-center gap-3">
             <img 
               src={BOPEL_LOGO} 
@@ -487,34 +479,94 @@ export default function App() {
               referrerPolicy="no-referrer"
               className="w-8 h-8 rounded-lg object-contain bg-white shadow-md ring-2 ring-white/90 shrink-0" 
             />
-            <div>
-              <p className="text-white font-semibold">{t.brandName}</p>
-              <p className="text-xs text-slate-500">
-                {language === 'da' ? 'Danmarks samlede boligoversigt & links' : 'Complete Denmark housing directory & portals'}
+            <div className="text-left">
+              <p className="text-white font-bold text-base leading-tight">bopæl.dk – Danmarks boligguide</p>
+              <p className="text-xs text-slate-400">
+                {language === 'da' ? '97 verificerede kilder, almene selskaber & portaler' : '97 verified sources, housing associations & portals'}
               </p>
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center gap-4 text-xs">
+          {/* Exact links without brackets: Om os · Kontakt · Handelsbetingelser · Privatlivspolitik · Fortrydelsesret · Opsig abonnement */}
+          <nav className="flex flex-wrap items-center justify-center gap-x-2 sm:gap-x-3 gap-y-1 text-slate-300 text-xs sm:text-sm font-medium pt-1">
+            <button
+              type="button"
+              onClick={() => setActiveLegalModal('about')}
+              className="hover:text-blue-400 transition-colors"
+            >
+              {language === 'da' ? 'Om os' : 'About us'}
+            </button>
+            <span className="text-slate-600">·</span>
+            <button
+              type="button"
+              onClick={() => setActiveLegalModal('contact')}
+              className="hover:text-blue-400 transition-colors"
+            >
+              {language === 'da' ? 'Kontakt' : 'Contact'}
+            </button>
+            <span className="text-slate-600">·</span>
+            <button
+              type="button"
+              onClick={() => setActiveLegalModal('terms')}
+              className="hover:text-blue-400 transition-colors"
+            >
+              {language === 'da' ? 'Handelsbetingelser' : 'Terms & Conditions'}
+            </button>
+            <span className="text-slate-600">·</span>
+            <button
+              type="button"
+              onClick={() => setActiveLegalModal('privacy')}
+              className="hover:text-blue-400 transition-colors"
+            >
+              {language === 'da' ? 'Privatlivspolitik' : 'Privacy Policy'}
+            </button>
+            <span className="text-slate-600">·</span>
+            <button
+              type="button"
+              onClick={() => setActiveLegalModal('withdrawal')}
+              className="hover:text-blue-400 transition-colors"
+            >
+              {language === 'da' ? 'Fortrydelsesret' : 'Right of Withdrawal'}
+            </button>
+            <span className="text-slate-600">·</span>
+            <button
+              type="button"
+              onClick={() => setActiveLegalModal('cancel')}
+              className="text-amber-400 hover:text-amber-300 font-semibold transition-colors"
+            >
+              {language === 'da' ? 'Opsig abonnement' : 'Cancel subscription'}
+            </button>
+          </nav>
+
+          <div className="flex flex-wrap items-center justify-center gap-4 text-xs pt-2">
             <button
               type="button"
               onClick={() => setShowGuideModal(true)}
-              className="hover:text-white transition-colors flex items-center gap-1.5"
+              className="hover:text-white transition-colors flex items-center gap-1.5 text-blue-400"
             >
               <BookOpen className="w-3.5 h-3.5" />
               <span>{t.housingGuide}</span>
             </button>
             <span className="text-emerald-400 font-semibold flex items-center gap-1">
               <CheckCircle2 className="w-3.5 h-3.5" />
-              <span>{t.subscriptionActive}</span>
+              <span>{t.subscriptionActive} (7 kr./md)</span>
             </span>
           </div>
 
-          <div className="text-xs text-slate-500">
-            &copy; {new Date().getFullYear()} bopæl.dk. {language === 'da' ? 'Alle rettigheder forbeholdes.' : 'All rights reserved.'}
+          <div className="text-xs text-slate-500 pt-1">
+            &copy; {new Date().getFullYear()} bopæl.dk. {language === 'da' ? 'Alle rettigheder forbeholdes.' : 'All rights reserved.'} • Stripe SSL kryptering
           </div>
         </div>
       </footer>
+
+      {/* Compliance / Legal Modal */}
+      <LegalModal
+        isOpen={activeLegalModal !== null}
+        activeSection={activeLegalModal || 'about'}
+        language={language}
+        onClose={() => setActiveLegalModal(null)}
+        onSelectSection={(sec) => setActiveLegalModal(sec)}
+      />
 
       {/* Housing Advice Guide Modal */}
       <HousingGuideModal

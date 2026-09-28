@@ -7,10 +7,10 @@ import {
   CreditCard, 
   ExternalLink, 
   ArrowRight, 
-  KeyRound,
-  Check,
-  AlertCircle,
-  Sparkles
+  KeyRound, 
+  Check, 
+  AlertCircle, 
+  Sparkles 
 } from 'lucide-react';
 import { STRIPE_PAYMENT_LINK, housingCategories } from '../data/housingData';
 import { translations } from '../data/translations';
@@ -138,21 +138,72 @@ export const PaywallModal: React.FC<PaywallModalProps> = ({
           {/* Body Content */}
           <div className="p-6 sm:p-8 space-y-6 bg-slate-900 text-slate-200">
             {/* Feature Highlights */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-              {[
-                t.paywallFeature1,
-                t.paywallFeature2,
-                t.paywallFeature3,
-                t.paywallFeature4,
-                t.paywallFeature5,
-              ].map((feature, idx) => (
-                <div key={idx} className="flex items-start gap-2.5 text-sm text-slate-200">
-                  <div className="mt-0.5 w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 border border-emerald-500/30">
-                    <Check className="w-3.5 h-3.5 stroke-[2.5]" />
+            <div className="space-y-3">
+              <h3 className="text-sm font-bold text-white">
+                {language === 'da' ? 'Hvad får du adgang til?' : 'What do you get access to?'}
+              </h3>
+              <div className="space-y-2.5">
+                {(language === 'da' ? [
+                  {
+                    title: 'Direkte links til relevante boligportaler og udlejere',
+                    desc: 'Find boligportaler og udlejere samlet ét sted.',
+                  },
+                  {
+                    title: 'Almene boligorganisationer',
+                    desc: 'Få adgang til links og information om boligorganisationer og deres ventelister i blandt andet København, Aarhus, Odense og Aalborg.',
+                  },
+                  {
+                    title: 'Kollegier og studieboliger',
+                    desc: 'Find relevante kollegier og studieboliger samt links til de enkelte udbyderes hjemmesider og opskrivningsmuligheder.',
+                  },
+                  {
+                    title: 'Pensionskasser og institutionelle udlejere',
+                    desc: 'Find boligoplysninger og links til relevante pensionskasser og institutionelle udlejere, når de tilbyder boligrelaterede muligheder.',
+                  },
+                  {
+                    title: 'Guide til lejevilkår',
+                    desc: 'Få information og guides om blandt andet lejekontrakt, depositum, forudbetalt leje og almindelige lejevilkår.',
+                  },
+                ] : [
+                  {
+                    title: 'Direct links to relevant housing portals and landlords',
+                    desc: 'Find housing portals and landlords gathered in one place.',
+                  },
+                  {
+                    title: 'Public housing associations',
+                    desc: 'Get access to links and information about housing associations and their waiting lists in Copenhagen, Aarhus, Odense, and Aalborg.',
+                  },
+                  {
+                    title: 'Student dorms and youth housing',
+                    desc: 'Find relevant dorms and youth apartments with links to provider websites and application procedures.',
+                  },
+                  {
+                    title: 'Pension funds and institutional landlords',
+                    desc: 'Find housing details and links to relevant pension funds and institutional property owners.',
+                  },
+                  {
+                    title: 'Guide to rental terms and tenancy',
+                    desc: 'Get guides and info on lease agreements, deposits, prepaid rent, and standard rental terms.',
+                  },
+                ]).map((feat, idx) => (
+                  <div
+                    key={idx}
+                    className="flex items-start gap-2.5 p-2 rounded-lg bg-white/[0.03] border border-white/[0.05] hover:bg-white/[0.05] transition-colors"
+                  >
+                    <div className="mt-0.5 w-4 h-4 rounded-full bg-emerald-500/15 text-emerald-400 flex items-center justify-center shrink-0 border border-emerald-500/25">
+                      <Check className="w-2.5 h-2.5 stroke-[2.5]" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <span className="font-medium text-white block text-xs leading-snug">
+                        {feat.title}
+                      </span>
+                      <p className="text-[11px] text-slate-400 mt-0.5 leading-normal">
+                        {feat.desc}
+                      </p>
+                    </div>
                   </div>
-                  <span className="font-medium">{feature}</span>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
 
             {/* Pricing Card & Primary CTA */}
