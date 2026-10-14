@@ -1,0 +1,52 @@
+{
+  "entities": {
+    "reviews": {
+      "title": "Member Reviews",
+      "description": "Public reviews and testimonials left by verified members",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Full name or alias of the reviewer"
+        },
+        "city": {
+          "type": "string",
+          "description": "City or area in Denmark"
+        },
+        "rating": {
+          "type": "number",
+          "description": "Rating score between 1 and 5"
+        },
+        "title": {
+          "type": "string",
+          "description": "Short headline of the review"
+        },
+        "comment": {
+          "type": "string",
+          "description": "Full text comment of the review"
+        },
+        "date": {
+          "type": "string",
+          "description": "Formatted date string"
+        },
+        "createdAt": {
+          "type": "number",
+          "description": "Timestamp for ordering"
+        },
+        "verifiedBuyer": {
+          "type": "boolean",
+          "description": "Flag indicating verified member"
+        },
+        "helpfulCount": {
+          "type": "number",
+          "description": "Count of helpful votes"
+        },
+        "categoryTag": {
+          "type": "string",
+          "description": "Tag like Studiebolig, Pensionskasse, Almene boliger"
+        }
+      },
+      "required": ["name", "rating", "title", "comment"]
+    }
+  }
+}

@@ -9,9 +9,22 @@ import {
   ShieldCheck,
   Send,
   Sparkles,
-  Calendar
+  Calendar,
+  ChevronDown,
+  ChevronUp
 } from 'lucide-react';
 import { Language } from '../types';
+import { db } from '../utils/firebase';
+import { 
+  collection, 
+  addDoc, 
+  onSnapshot, 
+  query, 
+  orderBy, 
+  doc, 
+  updateDoc, 
+  increment 
+} from 'firebase/firestore';
 
 export interface Review {
   id: string;
@@ -21,12 +34,12 @@ export interface Review {
   title: string;
   comment: string;
   date: string;
+  createdAt?: number;
   verifiedBuyer: boolean;
   helpfulCount: number;
   categoryTag?: string;
 }
 
-const STORAGE_KEY_REVIEWS = 'bopael_user_reviews_v1';
 const STORAGE_KEY_HELPFUL = 'bopael_helpful_votes_v1';
 
 const INITIAL_REVIEWS: Review[] = [
@@ -86,18 +99,8 @@ interface ReviewsSectionProps {
 }
 
 export const ReviewsSection: React.FC<ReviewsSectionProps> = ({ language }) => {
-  const [reviews, setReviews] = useState<Review[]>(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY_REVIEWS);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-      }
-    } catch {
-      // fallback
-    }
-    return INITIAL_REVIEWS;
-  });
+  const [reviews, setReviews] = useState<Review[]>(INITIAL_REVIEWS);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [helpfulVoted, setHelpfulVoted] = useState<string[]>(() => {
     try {
@@ -109,6 +112,7 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({ language }) => {
   });
 
   const [filterRating, setFilterRating] = useState<number | 'all'>('all');
+  const [isSectionOpen, setIsSectionOpen] = useState(false);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);
 
@@ -120,13 +124,50 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({ language }) => {
   const [newComment, setNewComment] = useState('');
   const [hoverRating, setHoverRating] = useState<number | null>(null);
 
+  // Real-time synchronization with Cloud Firestore
   useEffect(() => {
     try {
-      localStorage.setItem(STORAGE_KEY_REVIEWS, JSON.stringify(reviews));
-    } catch {
-      // ignore
+      const reviewsRef = collection(db, 'reviews');
+      const q = query(reviewsRef, orderBy('createdAt', 'desc'));
+
+      const unsubscribe = onSnapshot(q, (snapshot) => {
+        if (!snapshot.empty) {
+          const liveReviews: Review[] = snapshot.docs.map(docSnap => {
+            const data = docSnap.data();
+            return {
+              id: docSnap.id,
+              name: data.name || 'Anonym',
+              city: data.city || '',
+              rating: Number(data.rating) || 5,
+              title: data.title || '',
+              comment: data.comment || '',
+              date: data.date || '',
+              createdAt: data.createdAt,
+              verifiedBuyer: Boolean(data.verifiedBuyer ?? true),
+              helpfulCount: Number(data.helpfulCount || 0),
+              categoryTag: data.categoryTag || ''
+            };
+          });
+
+          // Combine with initial baseline reviews so the community never looks empty
+          const combined = [...liveReviews];
+          INITIAL_REVIEWS.forEach(initRev => {
+            if (!combined.some(r => r.id === initRev.id || r.title === initRev.title)) {
+              combined.push(initRev);
+            }
+          });
+
+          setReviews(combined);
+        }
+      }, (error) => {
+        console.warn('Firestore live reviews sync listener notice:', error);
+      });
+
+      return () => unsubscribe();
+    } catch (err) {
+      console.warn('Firestore initialization notice:', err);
     }
-  }, [reviews]);
+  }, []);
 
   useEffect(() => {
     try {
@@ -136,52 +177,86 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({ language }) => {
     }
   }, [helpfulVoted]);
 
-  const handleVoteHelpful = (reviewId: string) => {
+  const handleVoteHelpful = async (reviewId: string) => {
     if (helpfulVoted.includes(reviewId)) return;
 
+    // Optimistic UI update
     setReviews(prev => prev.map(r => {
       if (r.id === reviewId) {
-        return { ...r, helpfulCount: r.helpfulCount + 1 };
+        return { ...r, helpfulCount: (r.helpfulCount || 0) + 1 };
       }
       return r;
     }));
 
     setHelpfulVoted(prev => [...prev, reviewId]);
+
+    // Update in Firestore if not one of the hardcoded baseline items
+    if (!reviewId.startsWith('rev-')) {
+      try {
+        const reviewRef = doc(db, 'reviews', reviewId);
+        await updateDoc(reviewRef, {
+          helpfulCount: increment(1)
+        });
+      } catch (err) {
+        console.warn('Could not increment helpful vote in cloud:', err);
+      }
+    }
   };
 
-  const handleSubmitReview = (e: React.FormEvent) => {
+  const handleSubmitReview = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newName.trim() || !newComment.trim() || !newTitle.trim()) return;
+    if (!newName.trim() || !newComment.trim() || !newTitle.trim() || isSubmitting) return;
 
+    setIsSubmitting(true);
     const today = new Date();
     const formattedDate = language === 'da'
       ? `${today.getDate()}. ${['jan.', 'feb.', 'mar.', 'apr.', 'maj', 'jun.', 'jul.', 'aug.', 'sep.', 'okt.', 'nov.', 'dec.'][today.getMonth()]} ${today.getFullYear()}`
       : `${['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][today.getMonth()]} ${today.getDate()}, ${today.getFullYear()}`;
 
-    const newReview: Review = {
-      id: `rev-${Date.now()}`,
+    const reviewPayload = {
       name: newName.trim(),
       city: newCity.trim() || (language === 'da' ? 'Danmark' : 'Denmark'),
-      rating: newRating,
+      rating: Number(newRating),
       title: newTitle.trim(),
       comment: newComment.trim(),
       date: formattedDate,
+      createdAt: Date.now(),
       verifiedBuyer: true,
       helpfulCount: 0,
       categoryTag: language === 'da' ? 'Medlem' : 'Member'
     };
 
-    setReviews(prev => [newReview, ...prev]);
-    setNewName('');
-    setNewCity('');
-    setNewTitle('');
-    setNewComment('');
-    setNewRating(5);
-    setFormSubmitted(true);
-    setTimeout(() => {
-      setFormSubmitted(false);
-      setIsFormOpen(false);
-    }, 2500);
+    try {
+      // Save permanently to Firebase Firestore so ALL users see it
+      const docRef = await addDoc(collection(db, 'reviews'), reviewPayload);
+      
+      const newReview: Review = {
+        id: docRef.id,
+        ...reviewPayload
+      };
+
+      setReviews(prev => [newReview, ...prev.filter(r => r.id !== docRef.id)]);
+    } catch (error) {
+      console.warn('Writing to Firestore encountered error, fallback saved locally:', error);
+      // Fallback local persistence if offline
+      const fallbackReview: Review = {
+        id: `local-${Date.now()}`,
+        ...reviewPayload
+      };
+      setReviews(prev => [fallbackReview, ...prev]);
+    } finally {
+      setIsSubmitting(false);
+      setNewName('');
+      setNewCity('');
+      setNewTitle('');
+      setNewComment('');
+      setNewRating(5);
+      setFormSubmitted(true);
+      setTimeout(() => {
+        setFormSubmitted(false);
+        setIsFormOpen(false);
+      }, 2500);
+    }
   };
 
   // Calculations
@@ -195,25 +270,56 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({ language }) => {
   });
 
   return (
-    <section className="relative z-10 w-full max-w-4xl mx-auto px-4 sm:px-6 my-8">
-      <div className="rounded-2xl bg-slate-900/80 backdrop-blur-md border border-white/10 shadow-2xl p-5 sm:p-7 space-y-6">
-        
-        {/* Header & Stats Banner */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-5 border-b border-white/10">
-          <div>
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-400/10 text-amber-300 border border-amber-400/20 mb-2">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>{language === 'da' ? 'Verificerede Medlemsanmeldelser' : 'Verified Member Reviews'}</span>
+    <section className="relative z-10 w-full max-w-4xl mx-auto px-4 sm:px-6 my-4">
+      {/* Sleek Toggle Button */}
+      <div className="flex justify-center">
+        <button
+          type="button"
+          id="btn-toggle-reviews-section"
+          onClick={() => setIsSectionOpen(!isSectionOpen)}
+          className="group inline-flex items-center gap-2.5 px-4 sm:px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm text-slate-200 bg-slate-900/80 hover:bg-slate-800/90 hover:text-white border border-white/15 backdrop-blur-md shadow-lg transition-all active:scale-95"
+        >
+          <div className="flex items-center gap-1 text-amber-400">
+            <Sparkles className="w-4 h-4" />
+            <div className="flex items-center">
+              <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+              <span className="text-white font-bold ml-1 text-xs">{averageRating}</span>
             </div>
-            <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
-              {language === 'da' ? 'Hvad siger vores medlemmer?' : 'What do our members say?'}
-            </h3>
-            <p className="text-xs sm:text-sm text-slate-300 mt-1">
-              {language === 'da' 
-                ? 'Læs ærlige erfaringer og del din egen mening om bopæl.dk' 
-                : 'Read authentic experiences and share your feedback on bopæl.dk'}
-            </p>
           </div>
+          <span className="font-semibold text-white">
+            {language === 'da' ? 'Verificerede Medlemsanmeldelser' : 'Verified Member Reviews'}
+          </span>
+          <span className="text-[11px] text-slate-400 bg-slate-800 px-2 py-0.5 rounded-full border border-slate-700">
+            {reviews.length}
+          </span>
+          {isSectionOpen ? (
+            <ChevronUp className="w-4 h-4 text-slate-400 group-hover:text-white transition-transform" />
+          ) : (
+            <ChevronDown className="w-4 h-4 text-slate-400 group-hover:text-white transition-transform" />
+          )}
+        </button>
+      </div>
+
+      {/* Expanded Content: only visible when clicking the button */}
+      {isSectionOpen && (
+        <div className="mt-4 rounded-2xl bg-slate-900/85 backdrop-blur-md border border-white/10 shadow-2xl p-5 sm:p-7 space-y-6 animate-in fade-in duration-200">
+          
+          {/* Header & Stats Banner */}
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-5 border-b border-white/10">
+            <div>
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-400/10 text-amber-300 border border-amber-400/20 mb-2">
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>{language === 'da' ? 'Verificerede Medlemsanmeldelser' : 'Verified Member Reviews'}</span>
+              </div>
+              <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
+                {language === 'da' ? 'Hvad siger vores medlemmer?' : 'What do our members say?'}
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-300 mt-1">
+                {language === 'da' 
+                  ? 'Læs ærlige erfaringer og del din egen mening om bopæl.dk' 
+                  : 'Read authentic experiences and share your feedback on bopæl.dk'}
+              </p>
+            </div>
 
           {/* Rating Summary Badge & Add Review CTA */}
           <div className="flex items-center gap-4">
@@ -486,7 +592,8 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({ language }) => {
           })}
         </div>
 
-      </div>
-    </section>
-  );
-};
+          </div>
+        )}
+      </section>
+    );
+  };

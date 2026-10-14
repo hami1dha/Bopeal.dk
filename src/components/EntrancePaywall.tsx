@@ -461,8 +461,8 @@ export const EntrancePaywall: React.FC<EntrancePaywallProps> = ({
           </div>
         </div>
 
-        {/* Minimal Trust Indicator beneath hero */}
-        <div className="mt-3 flex flex-wrap items-center justify-center gap-3 sm:gap-5 text-[11px] text-slate-500">
+        {/* Trust Indicator & Reviews button beneath hero card */}
+        <div className="mt-3 flex flex-wrap items-center justify-center gap-3 sm:gap-4 text-[11px] text-slate-500">
           <span className="flex items-center gap-1 text-slate-400">
             <Check className="w-3 h-3 text-emerald-400" />
             7 kr. / md inkl. moms
@@ -478,10 +478,12 @@ export const EntrancePaywall: React.FC<EntrancePaywallProps> = ({
             Stripe SSL betaling
           </span>
         </div>
-      </main>
 
-      {/* Verified Member Reviews & Opinions System */}
-      <ReviewsSection language={language} isUnlocked={false} />
+        {/* Verified Member Reviews & Opinions System - Right here under the card */}
+        <div className="w-full mt-2">
+          <ReviewsSection language={language} isUnlocked={false} />
+        </div>
+      </main>
 
       {/* FOOTER: Exact requested format with all 9 links */}
       <footer className="relative z-10 border-t border-white/10 bg-slate-950/95 backdrop-blur-md py-6 text-xs text-slate-400 mt-auto">
