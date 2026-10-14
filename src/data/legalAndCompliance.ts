@@ -283,7 +283,7 @@ export const COMPLIANCE_DATA = {
       links: [
         { key: 'about' as LegalSectionKey, label: 'About us' },
         { key: 'contact' as LegalSectionKey, label: 'Contact' },
-        { key: 'terms' as LegalSectionKey, label: 'Terms' },
+        { key: 'terms' as LegalSectionKey, label: 'Terms & Conditions' },
         { key: 'privacy' as LegalSectionKey, label: 'Privacy Policy' },
         { key: 'withdrawal' as LegalSectionKey, label: 'Right of Withdrawal' },
         { key: 'cancel' as LegalSectionKey, label: 'Cancel Subscription' },

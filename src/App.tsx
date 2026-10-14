@@ -61,6 +61,7 @@ export default function App() {
   });
 
   const t = translations[language];
+  const compliance = COMPLIANCE_DATA[language];
 
   // Evaluate URL parameters securely (valid Stripe session_id or access key ONLY, rejects ?success=true)
   useEffect(() => {
@@ -487,55 +488,24 @@ export default function App() {
             </div>
           </div>
 
-          {/* Exact links without brackets: Om os · Kontakt · Handelsbetingelser · Privatlivspolitik · Fortrydelsesret · Opsig abonnement */}
-          <nav className="flex flex-wrap items-center justify-center gap-x-2 sm:gap-x-3 gap-y-1 text-slate-300 text-xs sm:text-sm font-medium pt-1">
-            <button
-              type="button"
-              onClick={() => setActiveLegalModal('about')}
-              className="hover:text-blue-400 transition-colors"
-            >
-              {language === 'da' ? 'Om os' : 'About us'}
-            </button>
-            <span className="text-slate-600">·</span>
-            <button
-              type="button"
-              onClick={() => setActiveLegalModal('contact')}
-              className="hover:text-blue-400 transition-colors"
-            >
-              {language === 'da' ? 'Kontakt' : 'Contact'}
-            </button>
-            <span className="text-slate-600">·</span>
-            <button
-              type="button"
-              onClick={() => setActiveLegalModal('terms')}
-              className="hover:text-blue-400 transition-colors"
-            >
-              {language === 'da' ? 'Handelsbetingelser' : 'Terms & Conditions'}
-            </button>
-            <span className="text-slate-600">·</span>
-            <button
-              type="button"
-              onClick={() => setActiveLegalModal('privacy')}
-              className="hover:text-blue-400 transition-colors"
-            >
-              {language === 'da' ? 'Privatlivspolitik' : 'Privacy Policy'}
-            </button>
-            <span className="text-slate-600">·</span>
-            <button
-              type="button"
-              onClick={() => setActiveLegalModal('withdrawal')}
-              className="hover:text-blue-400 transition-colors"
-            >
-              {language === 'da' ? 'Fortrydelsesret' : 'Right of Withdrawal'}
-            </button>
-            <span className="text-slate-600">·</span>
-            <button
-              type="button"
-              onClick={() => setActiveLegalModal('cancel')}
-              className="text-amber-400 hover:text-amber-300 font-semibold transition-colors"
-            >
-              {language === 'da' ? 'Opsig abonnement' : 'Cancel subscription'}
-            </button>
+          {/* All 9 consumer links in footer */}
+          <nav className="flex flex-wrap items-center justify-center gap-x-2 sm:gap-x-3 gap-y-1.5 text-slate-300 text-xs sm:text-sm font-medium pt-1">
+            {compliance.footer.links.map((link, idx) => (
+              <React.Fragment key={link.key}>
+                {idx > 0 && <span className="text-slate-600">·</span>}
+                <button
+                  type="button"
+                  onClick={() => setActiveLegalModal(link.key)}
+                  className={`hover:text-blue-400 transition-colors ${
+                    link.key === 'cancel'
+                      ? 'text-amber-400 hover:text-amber-300 font-semibold'
+                      : ''
+                  }`}
+                >
+                  {link.label}
+                </button>
+              </React.Fragment>
+            ))}
           </nav>
 
           <div className="flex flex-wrap items-center justify-center gap-4 text-xs pt-2">

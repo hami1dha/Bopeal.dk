@@ -88,60 +88,6 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
         </div>
 
-        {/* Clean text navigation at the top like "Om os" and "Kontakt" */}
-        {onOpenLegal && (
-          <nav className="hidden xl:flex items-center gap-3.5 text-xs text-slate-300 font-medium">
-            <button
-              type="button"
-              onClick={() => onOpenLegal('how-it-works')}
-              className="hover:text-white transition-colors"
-            >
-              {language === 'da' ? 'Sådan virker det' : 'How it works'}
-            </button>
-            <button
-              type="button"
-              onClick={() => onOpenLegal('about')}
-              className="hover:text-white transition-colors"
-            >
-              {language === 'da' ? 'Om os' : 'About'}
-            </button>
-            <button
-              type="button"
-              onClick={() => onOpenLegal('contact')}
-              className="hover:text-white transition-colors"
-            >
-              {language === 'da' ? 'Kontakt' : 'Contact'}
-            </button>
-            <button
-              type="button"
-              onClick={() => onOpenLegal('terms')}
-              className="hover:text-white transition-colors"
-            >
-              {language === 'da' ? 'Handelsbetingelser' : 'Terms'}
-            </button>
-            <button
-              type="button"
-              onClick={() => onOpenLegal('privacy')}
-              className="hover:text-white transition-colors"
-            >
-              {language === 'da' ? 'Privatliv' : 'Privacy'}
-            </button>
-            <button
-              type="button"
-              onClick={() => onOpenLegal('withdrawal')}
-              className="hover:text-white transition-colors"
-            >
-              {language === 'da' ? 'Fortrydelsesret' : 'Withdrawal'}
-            </button>
-            <button
-              type="button"
-              onClick={() => onOpenLegal('cancel')}
-              className="text-amber-400 hover:text-amber-300 font-semibold transition-colors"
-            >
-              {language === 'da' ? 'Opsig' : 'Cancel'}
-            </button>
-          </nav>
-        )}
 
         {/* Action Controls & Subscription Status */}
         <div className="flex flex-wrap items-center justify-end gap-2 w-full md:w-auto">

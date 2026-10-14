@@ -9,7 +9,16 @@ import {
   AlertCircle, 
   Globe2,
   Lock,
-  Sparkles
+  Sparkles,
+  HelpCircle,
+  Info,
+  Mail,
+  FileText,
+  RotateCcw,
+  Ban,
+  ChevronDown,
+  CheckCircle2,
+  ExternalLink
 } from 'lucide-react';
 import { STRIPE_PAYMENT_LINK } from '../data/housingData';
 import { Language } from '../types';
@@ -39,6 +48,31 @@ export const EntrancePaywall: React.FC<EntrancePaywallProps> = ({
   const [accessInput, setAccessInput] = useState('');
   const [verifyError, setVerifyError] = useState('');
   const [activeLegalModal, setActiveLegalModal] = useState<LegalSectionKey | null>(null);
+  const [inlineSection, setInlineSection] = useState<LegalSectionKey>('how-it-works');
+  const [openInlineFaq, setOpenInlineFaq] = useState<number | null>(null);
+
+  const getSectionIcon = (key: LegalSectionKey) => {
+    switch (key) {
+      case 'how-it-works':
+        return <Sparkles className="w-3.5 h-3.5" />;
+      case 'subscription':
+        return <CreditCard className="w-3.5 h-3.5" />;
+      case 'faq':
+        return <HelpCircle className="w-3.5 h-3.5" />;
+      case 'about':
+        return <Info className="w-3.5 h-3.5" />;
+      case 'contact':
+        return <Mail className="w-3.5 h-3.5" />;
+      case 'terms':
+        return <FileText className="w-3.5 h-3.5" />;
+      case 'privacy':
+        return <Lock className="w-3.5 h-3.5" />;
+      case 'withdrawal':
+        return <RotateCcw className="w-3.5 h-3.5" />;
+      case 'cancel':
+        return <Ban className="w-3.5 h-3.5" />;
+    }
+  };
 
   const compliance = COMPLIANCE_DATA[language];
 
@@ -215,30 +249,6 @@ export const EntrancePaywall: React.FC<EntrancePaywallProps> = ({
 
           {/* Right side: Mobile Menu / Condensed items + Language Switch */}
           <div className="flex items-center gap-2 sm:gap-3">
-            {/* For medium screens (tablets) show primary links */}
-            <div className="hidden sm:flex lg:hidden items-center gap-3 text-xs text-slate-300">
-              <button
-                type="button"
-                onClick={() => setActiveLegalModal('how-it-works')}
-                className="hover:text-white"
-              >
-                {language === 'da' ? 'Sådan virker det' : 'How it works'}
-              </button>
-              <button
-                type="button"
-                onClick={() => setActiveLegalModal('about')}
-                className="hover:text-white"
-              >
-                {language === 'da' ? 'Om os' : 'About'}
-              </button>
-              <button
-                type="button"
-                onClick={() => setActiveLegalModal('contact')}
-                className="hover:text-white"
-              >
-                {language === 'da' ? 'Kontakt' : 'Contact'}
-              </button>
-            </div>
 
             <button
               type="button"
@@ -469,9 +479,7 @@ export const EntrancePaywall: React.FC<EntrancePaywallProps> = ({
         </div>
       </main>
 
-      {/* FOOTER: Exact requested format */}
-      {/* bopæl.dk – Danmarks boligguide */}
-      {/* [Om os] · [Kontakt] · [Handelsbetingelser] · [Privatlivspolitik] · [Fortrydelsesret] · [Opsig abonnement] */}
+      {/* FOOTER: Exact requested format with all 9 links */}
       <footer className="relative z-10 border-t border-white/10 bg-slate-950/95 backdrop-blur-md py-6 text-xs text-slate-400 mt-auto">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col items-center justify-center space-y-3 text-center">
           <div className="flex items-center gap-2">
@@ -489,55 +497,24 @@ export const EntrancePaywall: React.FC<EntrancePaywallProps> = ({
             </p>
           </div>
 
-          {/* Exact links without brackets: Om os · Kontakt · Handelsbetingelser · Privatlivspolitik · Fortrydelsesret · Opsig abonnement */}
-          <nav className="flex flex-wrap items-center justify-center gap-x-2 sm:gap-x-3 gap-y-1 text-slate-300 text-xs font-medium">
-            <button
-              type="button"
-              onClick={() => setActiveLegalModal('about')}
-              className="hover:text-blue-400 transition-colors"
-            >
-              {language === 'da' ? 'Om os' : 'About us'}
-            </button>
-            <span className="text-slate-600">·</span>
-            <button
-              type="button"
-              onClick={() => setActiveLegalModal('contact')}
-              className="hover:text-blue-400 transition-colors"
-            >
-              {language === 'da' ? 'Kontakt' : 'Contact'}
-            </button>
-            <span className="text-slate-600">·</span>
-            <button
-              type="button"
-              onClick={() => setActiveLegalModal('terms')}
-              className="hover:text-blue-400 transition-colors"
-            >
-              {language === 'da' ? 'Handelsbetingelser' : 'Terms & Conditions'}
-            </button>
-            <span className="text-slate-600">·</span>
-            <button
-              type="button"
-              onClick={() => setActiveLegalModal('privacy')}
-              className="hover:text-blue-400 transition-colors"
-            >
-              {language === 'da' ? 'Privatlivspolitik' : 'Privacy Policy'}
-            </button>
-            <span className="text-slate-600">·</span>
-            <button
-              type="button"
-              onClick={() => setActiveLegalModal('withdrawal')}
-              className="hover:text-blue-400 transition-colors"
-            >
-              {language === 'da' ? 'Fortrydelsesret' : 'Right of Withdrawal'}
-            </button>
-            <span className="text-slate-600">·</span>
-            <button
-              type="button"
-              onClick={() => setActiveLegalModal('cancel')}
-              className="text-amber-400 hover:text-amber-300 font-semibold transition-colors"
-            >
-              {language === 'da' ? 'Opsig abonnement' : 'Cancel subscription'}
-            </button>
+          {/* All 9 links: Sådan fungerer det · Abonnement · FAQ · Om os · Kontakt · Handelsbetingelser · Privatliv · Fortrydelsesret · Opsig abonnement */}
+          <nav className="flex flex-wrap items-center justify-center gap-x-2 sm:gap-x-3 gap-y-1.5 text-slate-300 text-xs font-medium">
+            {compliance.footer.links.map((link, idx) => (
+              <React.Fragment key={link.key}>
+                {idx > 0 && <span className="text-slate-600">·</span>}
+                <button
+                  type="button"
+                  onClick={() => setActiveLegalModal(link.key)}
+                  className={`hover:text-blue-400 transition-colors ${
+                    link.key === 'cancel'
+                      ? 'text-amber-400 hover:text-amber-300 font-semibold'
+                      : ''
+                  }`}
+                >
+                  {link.label}
+                </button>
+              </React.Fragment>
+            ))}
           </nav>
 
           <div className="text-slate-500 text-[11px] flex flex-wrap items-center justify-center gap-3">
