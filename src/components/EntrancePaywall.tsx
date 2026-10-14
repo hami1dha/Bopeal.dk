@@ -26,6 +26,7 @@ import { BOPEL_LOGO, BOPEL_FALLBACK_LOGO } from '../assets/logo';
 import { Housing3DBackground } from './Housing3DBackground';
 import { COMPLIANCE_DATA, LegalSectionKey } from '../data/legalAndCompliance';
 import { LegalModal } from './LegalModal';
+import { ReviewsSection } from './ReviewsSection';
 import { 
   isValidAccessCode, 
   isValidStripeSessionId, 
@@ -478,6 +479,9 @@ export const EntrancePaywall: React.FC<EntrancePaywallProps> = ({
           </span>
         </div>
       </main>
+
+      {/* Verified Member Reviews & Opinions System */}
+      <ReviewsSection language={language} isUnlocked={false} />
 
       {/* FOOTER: Exact requested format with all 9 links */}
       <footer className="relative z-10 border-t border-white/10 bg-slate-950/95 backdrop-blur-md py-6 text-xs text-slate-400 mt-auto">
