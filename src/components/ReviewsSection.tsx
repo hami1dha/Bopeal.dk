@@ -40,6 +40,7 @@ export interface Review {
   categoryTag?: string;
 }
 
+const STORAGE_KEY_REVIEWS = 'bopael_user_reviews_v2';
 const STORAGE_KEY_HELPFUL = 'bopael_helpful_votes_v1';
 
 const INITIAL_REVIEWS: Review[] = [
@@ -51,6 +52,7 @@ const INITIAL_REVIEWS: Review[] = [
     title: 'Fandt studiebolig efter kun 3 uger!',
     comment: 'Jeg var så træt af at betale 300-400 kr. på dyre portaler uden svar. Listen med kollegier og almene boligselskaber her på bopæl.dk sparede mig for tusindvis af kroner, og jeg fik tilbudt en studiebolig på Nørrebro.',
     date: '12. okt. 2026',
+    createdAt: 1728720000000,
     verifiedBuyer: true,
     helpfulCount: 24,
     categoryTag: 'Studiebolig'
@@ -63,6 +65,7 @@ const INITIAL_REVIEWS: Review[] = [
     title: 'De 7 kr. er tjent ind 100 gange',
     comment: 'Direkte adgang til pensionskassernes egne ventelister var guld værd for min kæreste og mig. Ingen mellemmænd eller falske annoncer. Super god og transparent service.',
     date: '8. okt. 2026',
+    createdAt: 1728374400000,
     verifiedBuyer: true,
     helpfulCount: 19,
     categoryTag: 'Pensionskasser'
@@ -75,6 +78,7 @@ const INITIAL_REVIEWS: Review[] = [
     title: 'Genial lejeguide og lejekontrakt-tjek',
     comment: 'Guiden til depositum og indflytningssyn alene er det hele værd. Det gav os tryghed til at vide hvad udlejeren må og ikke må kræve. Kæmpe anbefaling herfra!',
     date: '4. okt. 2026',
+    createdAt: 1728028800000,
     verifiedBuyer: true,
     helpfulCount: 15,
     categoryTag: 'Lejeguide'
@@ -87,6 +91,7 @@ const INITIAL_REVIEWS: Review[] = [
     title: 'Rigtig god og overskuelig samling',
     comment: 'Super rart at have alle almene ventelister samlet ét sted uden at skulle google i dagevis. Nemt at opsige og koster næsten ingenting.',
     date: '28. sep. 2026',
+    createdAt: 1727510400000,
     verifiedBuyer: true,
     helpfulCount: 11,
     categoryTag: 'Almene boliger'
@@ -99,7 +104,22 @@ interface ReviewsSectionProps {
 }
 
 export const ReviewsSection: React.FC<ReviewsSectionProps> = ({ language }) => {
-  const [reviews, setReviews] = useState<Review[]>(INITIAL_REVIEWS);
+  // Always load cached reviews from localStorage first so user submissions are never lost
+  const [reviews, setReviews] = useState<Review[]>(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY_REVIEWS);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed;
+        }
+      }
+    } catch {
+      // fallback
+    }
+    return INITIAL_REVIEWS;
+  });
+
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [helpfulVoted, setHelpfulVoted] = useState<string[]>(() => {
@@ -112,7 +132,7 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({ language }) => {
   });
 
   const [filterRating, setFilterRating] = useState<number | 'all'>('all');
-  const [isSectionOpen, setIsSectionOpen] = useState(false);
+  const [isSectionOpen, setIsSectionOpen] = useState(true); // Open by default when user requests or toggles
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);
 
@@ -124,13 +144,22 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({ language }) => {
   const [newComment, setNewComment] = useState('');
   const [hoverRating, setHoverRating] = useState<number | null>(null);
 
-  // Real-time synchronization with Cloud Firestore
+  // Keep localStorage updated whenever reviews change
   useEffect(() => {
     try {
-      const reviewsRef = collection(db, 'reviews');
-      const q = query(reviewsRef, orderBy('createdAt', 'desc'));
+      localStorage.setItem(STORAGE_KEY_REVIEWS, JSON.stringify(reviews));
+    } catch {
+      // ignore
+    }
+  }, [reviews]);
 
-      const unsubscribe = onSnapshot(q, (snapshot) => {
+  // Real-time synchronization with Cloud Firestore
+  useEffect(() => {
+    let unsubscribe = () => {};
+    try {
+      const reviewsRef = collection(db, 'reviews');
+      // Simple collection query - avoids composite index requirements
+      unsubscribe = onSnapshot(reviewsRef, (snapshot) => {
         if (!snapshot.empty) {
           const liveReviews: Review[] = snapshot.docs.map(docSnap => {
             const data = docSnap.data();
@@ -142,31 +171,39 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({ language }) => {
               title: data.title || '',
               comment: data.comment || '',
               date: data.date || '',
-              createdAt: data.createdAt,
+              createdAt: Number(data.createdAt) || Date.now(),
               verifiedBuyer: Boolean(data.verifiedBuyer ?? true),
               helpfulCount: Number(data.helpfulCount || 0),
               categoryTag: data.categoryTag || ''
             };
           });
 
-          // Combine with initial baseline reviews so the community never looks empty
-          const combined = [...liveReviews];
-          INITIAL_REVIEWS.forEach(initRev => {
-            if (!combined.some(r => r.id === initRev.id || r.title === initRev.title)) {
-              combined.push(initRev);
-            }
+          // Merge live reviews with baseline and locally cached reviews
+          setReviews((prev) => {
+            const map = new Map<string, Review>();
+            // Add live reviews first
+            liveReviews.forEach(r => map.set(r.id, r));
+            // Add prev reviews if missing
+            prev.forEach(r => {
+              if (!map.has(r.id)) map.set(r.id, r);
+            });
+            // Ensure initial baseline reviews exist
+            INITIAL_REVIEWS.forEach(r => {
+              if (!map.has(r.id)) map.set(r.id, r);
+            });
+            
+            // Sort newest first
+            return Array.from(map.values()).sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
           });
-
-          setReviews(combined);
         }
       }, (error) => {
-        console.warn('Firestore live reviews sync listener notice:', error);
+        console.warn('Firestore live reviews sync listener error:', error);
       });
-
-      return () => unsubscribe();
     } catch (err) {
       console.warn('Firestore initialization notice:', err);
     }
+
+    return () => unsubscribe();
   }, []);
 
   useEffect(() => {
