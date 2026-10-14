@@ -113,7 +113,7 @@ export const EntrancePaywall: React.FC<EntrancePaywallProps> = ({
 
   const content = language === 'da' ? {
     badge: 'Eksklusiv medlemsadgang – Danmarks samlede boligdatabase',
-    title: 'Lås op for Danmarks 97 Verificerede Boligportaler',
+    title: 'Fuld adgang til Danmarks samlede boligoversigt',
     description: 'Alle direkte links, almene ventelister, gratis kollegier, pensionskasser, huslejeregler og rådgivning samlet ét sted. Få fuld adgang med det samme efter betaling via Stripe.',
     featuresHeader: 'Hvad får du adgang til?',
     features: [
@@ -155,7 +155,7 @@ export const EntrancePaywall: React.FC<EntrancePaywallProps> = ({
     rights: 'Alle rettigheder forbeholdes.',
   } : {
     badge: 'Exclusive Member Access – Denmark\'s Complete Housing Database',
-    title: 'Unlock Denmark\'s 97 Verified Housing Portals',
+    title: 'Full Access to Denmark\'s Complete Housing Directory',
     description: 'All direct links, public housing waitlists, free student dorms, pension funds, rental rules, and legal advice gathered in one place. Get full access immediately after payment via Stripe.',
     featuresHeader: 'What do you get access to?',
     features: [
@@ -198,12 +198,12 @@ export const EntrancePaywall: React.FC<EntrancePaywallProps> = ({
   };
 
   return (
-    <div className="relative min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-blue-600 selection:text-white">
+    <div className="relative min-h-screen text-slate-100 flex flex-col font-sans selection:bg-blue-600 selection:text-white">
       {/* 3D Animated Cinematic Background */}
       <Housing3DBackground />
 
       {/* TOP HEADER: Clean text links without heavy boxed fields so the site stays sleek */}
-      <header className="relative z-20 border-b border-white/10 bg-slate-950/80 backdrop-blur-md sticky top-0 shadow-md">
+      <header className="relative z-20 border-b border-white/10 bg-transparent backdrop-blur-sm sticky top-0">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
           {/* Logo & Brand */}
           <div className="flex items-center gap-3 shrink-0">
@@ -263,7 +263,7 @@ export const EntrancePaywall: React.FC<EntrancePaywallProps> = ({
         </div>
 
         {/* Mobile secondary bar for smaller screens so mobile users also have quick access to all links at top */}
-        <div className="lg:hidden flex items-center gap-3 px-4 py-2 border-t border-white/5 bg-slate-950/90 overflow-x-auto text-[11px] text-slate-300 no-scrollbar">
+        <div className="lg:hidden flex items-center gap-3 px-4 py-2 border-t border-white/5 bg-slate-950/40 backdrop-blur-sm overflow-x-auto text-[11px] text-slate-300 no-scrollbar">
           {compliance.navLinks.map((link) => (
             <button
               key={link.key}
@@ -279,8 +279,8 @@ export const EntrancePaywall: React.FC<EntrancePaywallProps> = ({
 
       {/* Main Screen: Ultra-compact, sleek hero box that doesn't dominate the screen */}
       <main className="relative z-10 flex-1 flex flex-col items-center justify-center px-4 sm:px-6 py-2 sm:py-4 max-w-3xl mx-auto w-full">
-        {/* Main Glass Box - Smaller & space-efficient */}
-        <div className="w-full relative overflow-hidden rounded-2xl bg-slate-950/90 backdrop-blur-xl border border-white/10 shadow-xl p-4 sm:p-5">
+        {/* Main Glass Box - Smaller & space-efficient, semi-transparent */}
+        <div className="w-full relative overflow-hidden rounded-2xl bg-slate-950/70 backdrop-blur-md border border-white/15 shadow-2xl p-4 sm:p-5">
           <div className="absolute top-0 right-0 w-48 h-48 bg-blue-600/10 rounded-full blur-2xl pointer-events-none" />
           <div className="absolute bottom-0 left-0 w-48 h-48 bg-slate-600/10 rounded-full blur-2xl pointer-events-none" />
 

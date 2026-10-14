@@ -4,6 +4,7 @@ export type LegalSectionKey =
   | 'faq' 
   | 'about' 
   | 'contact' 
+  | 'dispute-partnership'
   | 'terms' 
   | 'privacy' 
   | 'withdrawal' 
@@ -17,6 +18,7 @@ export const COMPLIANCE_DATA = {
       { key: 'faq' as LegalSectionKey, label: 'FAQ' },
       { key: 'about' as LegalSectionKey, label: 'Om os' },
       { key: 'contact' as LegalSectionKey, label: 'Kontakt' },
+      { key: 'dispute-partnership' as LegalSectionKey, label: 'Klage / Samarbejde' },
       { key: 'terms' as LegalSectionKey, label: 'Handelsbetingelser' },
       { key: 'privacy' as LegalSectionKey, label: 'Privatliv' },
       { key: 'withdrawal' as LegalSectionKey, label: 'Fortrydelsesret' },
@@ -120,6 +122,16 @@ export const COMPLIANCE_DATA = {
       email: 'E-mail: bopaeldk@gmail.com',
       note: 'Har du spørgsmål til medlemskab, brug for hjælp eller ønsker du hjælp til opsigelse? Skriv til os, så vender vi hurtigt tilbage.',
     },
+    disputePartnership: {
+      title: 'Klage & Samarbejde',
+      complaintTitle: 'Klagevejledning & Henvendelser',
+      complaintText: 'Vi lægger stor vægt på tilfredse brugere og ordentlig service. Hvis du oplever problemer med dit medlemskab, betaling eller tekniske fejl, bedes du kontakte os direkte på e-mail. Vi behandler alle henvendelser hurtigst muligt.',
+      complaintEmail: 'bopaeldk@gmail.com',
+      euOdrText: 'Hvis du som forbruger ønsker at klage over et køb, kan du altid henvende dig til Center for Klageløsning (Nævnenes Hus) eller anvende EU-Kommissionens online klageportal (ODR).',
+      partnerTitle: 'Samarbejde & Partnerskaber',
+      partnerText: 'Repræsenterer du en boligportal, et alment boligselskab, en pensionskasse, en studieboligudbyder eller en privat udlejer? Vi er altid åbne for dialog om verificeret datadeling, API-integrationer og partnerskaber.',
+      partnerCta: 'Kontakt os for samarbejde på: bopaeldk@gmail.com (Att: Partnerskab)',
+    },
     about: {
       title: 'Om os',
       brand: 'bopæl.dk – Danmarks boligguide',
@@ -157,6 +169,7 @@ export const COMPLIANCE_DATA = {
       { key: 'faq' as LegalSectionKey, label: 'FAQ' },
       { key: 'about' as LegalSectionKey, label: 'About us' },
       { key: 'contact' as LegalSectionKey, label: 'Contact' },
+      { key: 'dispute-partnership' as LegalSectionKey, label: 'Complaints / Partnership' },
       { key: 'terms' as LegalSectionKey, label: 'Terms' },
       { key: 'privacy' as LegalSectionKey, label: 'Privacy' },
       { key: 'withdrawal' as LegalSectionKey, label: 'Withdrawal' },
@@ -259,6 +272,16 @@ export const COMPLIANCE_DATA = {
       brand: 'bopæl.dk',
       email: 'Email: bopaeldk@gmail.com',
       note: 'Questions regarding membership, billing, or cancellation? Send us an email and we will get back to you promptly.',
+    },
+    disputePartnership: {
+      title: 'Complaints & Partnerships',
+      complaintTitle: 'Complaints & Inquiries',
+      complaintText: 'We prioritize customer satisfaction. If you experience issues with your subscription, payment, or technical bugs, contact us directly via email. We address all requests promptly.',
+      complaintEmail: 'bopaeldk@gmail.com',
+      euOdrText: 'As an EU consumer, you can also submit a complaint through the Danish Center for Complaint Resolution (Nævnenes Hus) or via the European Commission online dispute resolution portal (ODR).',
+      partnerTitle: 'Partnerships & Collaboration',
+      partnerText: 'Do you represent a housing portal, social housing organization, pension fund, or student accommodation provider? We are always open to verified data exchanges, API integrations, and partnerships.',
+      partnerCta: 'Contact us for partnerships at: bopaeldk@gmail.com (Att: Partnerships)',
     },
     about: {
       title: 'About Us',

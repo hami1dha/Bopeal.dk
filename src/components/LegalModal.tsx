@@ -13,7 +13,8 @@ import {
   Lock,
   HelpCircle,
   Sparkles,
-  ChevronDown
+  ChevronDown,
+  Handshake
 } from 'lucide-react';
 import { Language } from '../types';
 import { COMPLIANCE_DATA, LegalSectionKey } from '../data/legalAndCompliance';
@@ -53,6 +54,8 @@ export const LegalModal: React.FC<LegalModalProps> = ({
         return <Info className="w-3.5 h-3.5" />;
       case 'contact':
         return <Mail className="w-3.5 h-3.5" />;
+      case 'dispute-partnership':
+        return <Handshake className="w-3.5 h-3.5" />;
       case 'terms':
         return <FileText className="w-3.5 h-3.5" />;
       case 'privacy':
@@ -291,6 +294,53 @@ export const LegalModal: React.FC<LegalModalProps> = ({
                 <p className="text-xs text-slate-400">
                   {data.contact.note}
                 </p>
+              </div>
+            )}
+
+            {/* Klage / Samarbejde */}
+            {activeSection === 'dispute-partnership' && (
+              <div className="space-y-5">
+                <div className="flex items-center gap-2 text-blue-400 font-semibold text-lg pb-1 border-b border-slate-800">
+                  <Handshake className="w-5 h-5" />
+                  <h4>🤝 {data.disputePartnership.title}</h4>
+                </div>
+
+                {/* Klagesektion */}
+                <div className="rounded-xl bg-slate-800/70 border border-slate-700/80 p-4 space-y-2.5">
+                  <div className="text-sm font-bold text-white flex items-center gap-2">
+                    <span>⚖️</span>
+                    <span>{data.disputePartnership.complaintTitle}</span>
+                  </div>
+                  <p className="text-xs text-slate-300 leading-relaxed">
+                    {data.disputePartnership.complaintText}
+                  </p>
+                  <div className="text-xs text-slate-300 flex items-center gap-2 flex-wrap pt-1">
+                    <span className="text-slate-400 font-medium">Direkte kontakt:</span>
+                    <a
+                      href={`mailto:${data.disputePartnership.complaintEmail}`}
+                      className="text-blue-400 hover:underline font-mono bg-blue-950/60 px-2 py-0.5 rounded border border-blue-800/50"
+                    >
+                      {data.disputePartnership.complaintEmail}
+                    </a>
+                  </div>
+                  <p className="text-[11px] text-slate-400 leading-relaxed border-t border-slate-700/60 pt-2 mt-1">
+                    {data.disputePartnership.euOdrText}
+                  </p>
+                </div>
+
+                {/* Samarbejdssektion */}
+                <div className="rounded-xl bg-blue-950/30 border border-blue-800/40 p-4 space-y-2">
+                  <div className="text-sm font-bold text-blue-200 flex items-center gap-2">
+                    <span>🏢</span>
+                    <span>{data.disputePartnership.partnerTitle}</span>
+                  </div>
+                  <p className="text-xs text-slate-300 leading-relaxed">
+                    {data.disputePartnership.partnerText}
+                  </p>
+                  <div className="text-xs font-semibold text-blue-300 bg-blue-900/40 border border-blue-700/40 rounded-lg p-2.5">
+                    {data.disputePartnership.partnerCta}
+                  </div>
+                </div>
               </div>
             )}
 
