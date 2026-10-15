@@ -153,14 +153,43 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({ language }) => {
     }
   }, [reviews]);
 
-  // Real-time synchronization with Cloud Firestore
+  // Fetch and Real-time synchronization
   useEffect(() => {
+    let isMounted = true;
+
+    // 1. Fetch from server API (guaranteed persistent across all visitors)
+    const fetchServerReviews = async () => {
+      try {
+        const res = await fetch('/api/reviews');
+        if (res.ok) {
+          const data = await res.json();
+          if (data && Array.isArray(data.reviews) && data.reviews.length > 0 && isMounted) {
+            setReviews((prev) => {
+              const map = new Map<string, Review>();
+              data.reviews.forEach((r: Review) => map.set(r.id, r));
+              prev.forEach(r => {
+                if (!map.has(r.id)) map.set(r.id, r);
+              });
+              INITIAL_REVIEWS.forEach(r => {
+                if (!map.has(r.id)) map.set(r.id, r);
+              });
+              return Array.from(map.values()).sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+            });
+          }
+        }
+      } catch (e) {
+        console.warn('API review fetch note:', e);
+      }
+    };
+
+    fetchServerReviews();
+
+    // 2. Also listen to Firestore in real-time
     let unsubscribe = () => {};
     try {
       const reviewsRef = collection(db, 'reviews');
-      // Simple collection query - avoids composite index requirements
       unsubscribe = onSnapshot(reviewsRef, (snapshot) => {
-        if (!snapshot.empty) {
+        if (!snapshot.empty && isMounted) {
           const liveReviews: Review[] = snapshot.docs.map(docSnap => {
             const data = docSnap.data();
             return {
@@ -178,32 +207,29 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({ language }) => {
             };
           });
 
-          // Merge live reviews with baseline and locally cached reviews
           setReviews((prev) => {
             const map = new Map<string, Review>();
-            // Add live reviews first
             liveReviews.forEach(r => map.set(r.id, r));
-            // Add prev reviews if missing
             prev.forEach(r => {
               if (!map.has(r.id)) map.set(r.id, r);
             });
-            // Ensure initial baseline reviews exist
             INITIAL_REVIEWS.forEach(r => {
               if (!map.has(r.id)) map.set(r.id, r);
             });
-            
-            // Sort newest first
             return Array.from(map.values()).sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
           });
         }
       }, (error) => {
-        console.warn('Firestore live reviews sync listener error:', error);
+        console.warn('Firestore live sync error:', error);
       });
     } catch (err) {
       console.warn('Firestore initialization notice:', err);
     }
 
-    return () => unsubscribe();
+    return () => {
+      isMounted = false;
+      unsubscribe();
+    };
   }, []);
 
   useEffect(() => {
@@ -227,7 +253,14 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({ language }) => {
 
     setHelpfulVoted(prev => [...prev, reviewId]);
 
-    // Update in Firestore if not one of the hardcoded baseline items
+    // Send helpful update to server API
+    try {
+      await fetch(`/api/reviews/${reviewId}/helpful`, { method: 'POST' });
+    } catch (err) {
+      console.warn('Could not post helpful vote to API:', err);
+    }
+
+    // Also update in Firestore if not hardcoded
     if (!reviewId.startsWith('rev-')) {
       try {
         const reviewRef = doc(db, 'reviews', reviewId);
@@ -263,37 +296,51 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({ language }) => {
       categoryTag: language === 'da' ? 'Medlem' : 'Member'
     };
 
-    try {
-      // Save permanently to Firebase Firestore so ALL users see it
-      const docRef = await addDoc(collection(db, 'reviews'), reviewPayload);
-      
-      const newReview: Review = {
-        id: docRef.id,
-        ...reviewPayload
-      };
+    let savedReview: Review = {
+      id: `rev-${Date.now()}`,
+      ...reviewPayload
+    };
 
-      setReviews(prev => [newReview, ...prev.filter(r => r.id !== docRef.id)]);
-    } catch (error) {
-      console.warn('Writing to Firestore encountered error, fallback saved locally:', error);
-      // Fallback local persistence if offline
-      const fallbackReview: Review = {
-        id: `local-${Date.now()}`,
-        ...reviewPayload
-      };
-      setReviews(prev => [fallbackReview, ...prev]);
-    } finally {
-      setIsSubmitting(false);
-      setNewName('');
-      setNewCity('');
-      setNewTitle('');
-      setNewComment('');
-      setNewRating(5);
-      setFormSubmitted(true);
-      setTimeout(() => {
-        setFormSubmitted(false);
-        setIsFormOpen(false);
-      }, 2500);
+    // 1. Post to Server API (guarantees persistence across all devices & users)
+    try {
+      const response = await fetch('/api/reviews', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(reviewPayload)
+      });
+      if (response.ok) {
+        const json = await response.json();
+        if (json.review) {
+          savedReview = json.review;
+        }
+      }
+    } catch (apiErr) {
+      console.warn('API post review error:', apiErr);
     }
+
+    // 2. Also save to Firebase Firestore
+    try {
+      const docRef = await addDoc(collection(db, 'reviews'), reviewPayload);
+      if (docRef && docRef.id) {
+        savedReview.id = docRef.id;
+      }
+    } catch (fsErr) {
+      console.warn('Firestore write notice:', fsErr);
+    }
+
+    // Immediately update local UI so user sees their review instantly
+    setReviews(prev => [savedReview, ...prev.filter(r => r.id !== savedReview.id)]);
+    setIsSubmitting(false);
+    setNewName('');
+    setNewCity('');
+    setNewTitle('');
+    setNewComment('');
+    setNewRating(5);
+    setFormSubmitted(true);
+    setTimeout(() => {
+      setFormSubmitted(false);
+      setIsFormOpen(false);
+    }, 2500);
   };
 
   // Calculations
