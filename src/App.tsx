@@ -21,7 +21,6 @@ import { HousingGuideModal } from './components/HousingGuideModal';
 import { PaywallModal } from './components/PaywallModal';
 import { EntrancePaywall } from './components/EntrancePaywall';
 import { LegalModal } from './components/LegalModal';
-import { ReviewsSection } from './components/ReviewsSection';
 import { COMPLIANCE_DATA, LegalSectionKey } from './data/legalAndCompliance';
 import { 
   getStoredAuthState, 
@@ -464,9 +463,6 @@ export default function App() {
                 })}
               </div>
             </section>
-
-            {/* Member Reviews & Opinion System */}
-            <ReviewsSection language={language} isUnlocked={isUnlocked} />
           </main>
         </div>
       </div>

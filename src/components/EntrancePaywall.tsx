@@ -26,7 +26,6 @@ import { BOPEL_LOGO, BOPEL_FALLBACK_LOGO } from '../assets/logo';
 import { Housing3DBackground } from './Housing3DBackground';
 import { COMPLIANCE_DATA, LegalSectionKey } from '../data/legalAndCompliance';
 import { LegalModal } from './LegalModal';
-import { ReviewsSection } from './ReviewsSection';
 import { 
   isValidAccessCode, 
   isValidStripeSessionId, 
@@ -461,7 +460,7 @@ export const EntrancePaywall: React.FC<EntrancePaywallProps> = ({
           </div>
         </div>
 
-        {/* Trust Indicator & Reviews button beneath hero card */}
+        {/* Trust Indicator beneath hero card */}
         <div className="mt-3 flex flex-wrap items-center justify-center gap-3 sm:gap-4 text-[11px] text-slate-500">
           <span className="flex items-center gap-1 text-slate-400">
             <Check className="w-3 h-3 text-emerald-400" />
@@ -477,11 +476,6 @@ export const EntrancePaywall: React.FC<EntrancePaywallProps> = ({
             <Check className="w-3 h-3 text-emerald-400" />
             Stripe SSL betaling
           </span>
-        </div>
-
-        {/* Verified Member Reviews & Opinions System - Right here under the card */}
-        <div className="w-full mt-2">
-          <ReviewsSection language={language} isUnlocked={false} />
         </div>
       </main>
 
