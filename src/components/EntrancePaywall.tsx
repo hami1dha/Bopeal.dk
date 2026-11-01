@@ -164,9 +164,9 @@ export const EntrancePaywall: React.FC<EntrancePaywallProps> = ({
   return (
     <div className="min-h-screen bg-[#07152b] text-slate-100 flex flex-col font-sans selection:bg-blue-600 selection:text-white">
       
-      {/* 1. TOP UTILITY BAR (matches screenshot: Sikker betaling | Har du allerede betalt? Medlemsadgang) */}
-      <div className="bg-[#050f1f] border-b border-white/10 text-xs py-2 px-4 sm:px-6 z-30">
-        <div className="max-w-6xl mx-auto flex items-center justify-between gap-3 text-[11px] sm:text-xs">
+      {/* 1. TOP UTILITY BAR (Full width) */}
+      <div className="bg-[#050f1f] border-b border-white/10 text-xs py-2 px-4 sm:px-8 lg:px-12 z-30">
+        <div className="w-full max-w-7xl mx-auto flex items-center justify-between gap-3 text-[11px] sm:text-xs">
           {/* Left: Sikker betaling */}
           <div className="flex items-center gap-1.5 text-emerald-400 font-medium">
             <div className="w-3.5 h-3.5 rounded-full bg-emerald-500/20 flex items-center justify-center border border-emerald-500/30">
@@ -197,9 +197,9 @@ export const EntrancePaywall: React.FC<EntrancePaywallProps> = ({
         </div>
       </div>
 
-      {/* 2. MAIN HEADER (Logo, Om os, Kontakt, FAQ, IN ENGLISH) */}
+      {/* 2. MAIN HEADER (Full width) */}
       <header className="bg-[#0b1d3a] border-b border-white/10 sticky top-0 z-20 shadow-md">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
+        <div className="w-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 h-16 flex items-center justify-between gap-4">
           
           {/* Brand Logo & Name */}
           <div className="flex items-center gap-3 shrink-0">
@@ -263,9 +263,9 @@ export const EntrancePaywall: React.FC<EntrancePaywallProps> = ({
         </div>
       </header>
 
-      {/* 3. HERO IMAGE SECTION (Danish architecture, balconies, bikes, NO people) */}
+      {/* 3. HERO IMAGE SECTION (Danish architecture, balconies, bikes, NO people) - Edge-to-edge full width */}
       <section className="relative w-full overflow-hidden bg-slate-900">
-        <div className="relative w-full h-[320px] sm:h-[400px] md:h-[460px] max-w-6xl mx-auto overflow-hidden">
+        <div className="relative w-full h-[360px] sm:h-[460px] md:h-[540px] lg:h-[620px] overflow-hidden">
           <img
             src={heroArchitectureImg}
             alt="Moderne danske boliger og lejligheder i København"
@@ -273,21 +273,20 @@ export const EntrancePaywall: React.FC<EntrancePaywallProps> = ({
           />
 
           {/* Dark gradient overlay for crystal clear headline readability */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0b1d3a] via-[#0b1d3a]/60 to-transparent sm:bg-gradient-to-r sm:from-[#0b1d3a]/90 sm:via-[#0b1d3a]/50 sm:to-transparent flex flex-col justify-end p-5 sm:p-8 md:p-10" />
-
-          {/* Bold Headline matching design */}
-          <div className="absolute bottom-5 sm:bottom-8 left-5 sm:left-8 max-w-xl z-10">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-black uppercase text-white tracking-tight leading-[1.12] drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]">
-              {content.heroTitle}
-            </h1>
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0b1d3a] via-[#0b1d3a]/65 to-transparent sm:bg-gradient-to-r sm:from-[#0b1d3a]/95 sm:via-[#0b1d3a]/50 sm:to-transparent flex flex-col justify-end p-6 sm:p-10 lg:p-16">
+            <div className="w-full max-w-7xl mx-auto">
+              <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-[54px] font-black uppercase text-white tracking-tight leading-[1.08] max-w-3xl drop-shadow-[0_2px_14px_rgba(0,0,0,0.9)]">
+                {content.heroTitle}
+              </h1>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* 4. DEEP NAVY BLUE VALUE PROPOSITION & CTA SECTION */}
-      <section className="bg-[#0b1d3a] px-4 sm:px-6 pt-6 pb-8 sm:pb-10 border-b border-white/10 text-center sm:text-left">
-        <div className="max-w-4xl mx-auto space-y-6">
-          <p className="text-sm sm:text-base md:text-lg text-slate-100 font-medium leading-relaxed max-w-3xl">
+      {/* 4. DEEP NAVY BLUE VALUE PROPOSITION & CTA SECTION - Full width */}
+      <section className="bg-[#0b1d3a] px-4 sm:px-8 lg:px-12 pt-8 pb-10 sm:pb-14 border-b border-white/10 text-center sm:text-left">
+        <div className="w-full max-w-7xl mx-auto space-y-6">
+          <p className="text-base sm:text-lg md:text-xl text-slate-100 font-medium leading-relaxed max-w-4xl">
             {content.heroDesc}
           </p>
 
@@ -298,7 +297,7 @@ export const EntrancePaywall: React.FC<EntrancePaywallProps> = ({
               href={STRIPE_PAYMENT_LINK}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-xl font-black text-sm sm:text-base text-white bg-[#10b981] hover:bg-[#059669] active:scale-[0.98] shadow-lg shadow-emerald-600/30 uppercase tracking-wide transition-all group"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl font-black text-sm sm:text-base text-white bg-[#10b981] hover:bg-[#059669] active:scale-[0.98] shadow-lg shadow-emerald-600/30 uppercase tracking-wide transition-all group"
             >
               <span>{content.ctaBtn}</span>
               <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
@@ -313,9 +312,9 @@ export const EntrancePaywall: React.FC<EntrancePaywallProps> = ({
         </div>
       </section>
 
-      {/* 5. WHITE CARD WITH 4 FEATURE CATEGORIES (2x2 Grid with Danish illustrated icons) */}
-      <section className="bg-[#07152b] px-4 sm:px-6 pt-4 pb-12">
-        <div className="max-w-4xl mx-auto bg-white text-slate-900 rounded-2xl sm:rounded-3xl shadow-2xl border border-slate-100 overflow-hidden">
+      {/* 5. WHITE CARD WITH 4 FEATURE CATEGORIES - Full width container */}
+      <section className="bg-[#07152b] px-4 sm:px-8 lg:px-12 pt-6 pb-14">
+        <div className="w-full max-w-7xl mx-auto bg-white text-slate-900 rounded-2xl sm:rounded-3xl shadow-2xl border border-slate-100 overflow-hidden">
           <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-slate-100">
             
             {/* Feature 1: DIREKTE LINKS */}
@@ -420,17 +419,17 @@ export const EntrancePaywall: React.FC<EntrancePaywallProps> = ({
         </div>
       </section>
 
-      {/* 6. "SÅDAN FUNGERER DET" SECTION (Clean light background with 3 steps) */}
-      <section className="bg-[#f8fafc] text-slate-900 py-12 px-4 sm:px-6 border-t border-slate-200">
-        <div className="max-w-3xl mx-auto text-center space-y-8">
-          <h2 className="text-base sm:text-lg font-black tracking-wider text-slate-900 uppercase">
+      {/* 6. "SÅDAN FUNGERER DET" SECTION - Full width container */}
+      <section className="bg-[#f8fafc] text-slate-900 py-16 px-4 sm:px-8 lg:px-12 border-t border-slate-200">
+        <div className="w-full max-w-7xl mx-auto text-center space-y-10">
+          <h2 className="text-lg sm:text-xl font-black tracking-wider text-slate-900 uppercase">
             {content.howItWorksTitle}
           </h2>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 max-w-5xl mx-auto">
             
             {/* Step 1: Betal 7 kr. */}
-            <div className="flex flex-col items-center p-4 bg-white rounded-2xl border border-slate-200/80 shadow-xs">
+            <div className="flex flex-col items-center p-6 bg-white rounded-2xl border border-slate-200/80 shadow-xs">
               <div className="w-16 h-14 rounded-xl bg-slate-50 border-2 border-slate-700 flex flex-col justify-between p-2 mb-3 shadow-xs">
                 <div className="w-full flex justify-between items-center">
                   <div className="w-3 h-2 bg-amber-400 rounded-xs" />
@@ -447,7 +446,7 @@ export const EntrancePaywall: React.FC<EntrancePaywallProps> = ({
             </div>
 
             {/* Step 2: Log ind */}
-            <div className="flex flex-col items-center p-4 bg-white rounded-2xl border border-slate-200/80 shadow-xs">
+            <div className="flex flex-col items-center p-6 bg-white rounded-2xl border border-slate-200/80 shadow-xs">
               <div className="w-16 h-14 rounded-xl bg-slate-50 border-2 border-slate-700 flex items-center justify-center relative mb-3 shadow-xs">
                 {/* Arrow into user icon */}
                 <div className="flex items-center gap-1">
@@ -463,7 +462,7 @@ export const EntrancePaywall: React.FC<EntrancePaywallProps> = ({
             </div>
 
             {/* Step 3: Find din bolig */}
-            <div className="flex flex-col items-center p-4 bg-white rounded-2xl border border-slate-200/80 shadow-xs">
+            <div className="flex flex-col items-center p-6 bg-white rounded-2xl border border-slate-200/80 shadow-xs">
               <div className="w-16 h-14 rounded-xl bg-slate-50 border-2 border-slate-700 flex items-center justify-center relative mb-3 shadow-xs">
                 {/* House with magnifying glass */}
                 <svg className="w-8 h-8" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -494,9 +493,9 @@ export const EntrancePaywall: React.FC<EntrancePaywallProps> = ({
         </div>
       </section>
 
-      {/* 7. FOOTER with all 9 compliance links */}
-      <footer className="bg-[#050f1f] border-t border-white/10 text-slate-400 py-8 px-4 sm:px-6 text-xs mt-auto">
-        <div className="max-w-6xl mx-auto flex flex-col items-center justify-center space-y-4 text-center">
+      {/* 7. FOOTER with all 9 compliance links - Full width */}
+      <footer className="bg-[#050f1f] border-t border-white/10 text-slate-400 py-10 px-4 sm:px-8 lg:px-12 text-xs mt-auto">
+        <div className="w-full max-w-7xl mx-auto flex flex-col items-center justify-center space-y-4 text-center">
           
           <div className="flex items-center gap-2">
             <img 
