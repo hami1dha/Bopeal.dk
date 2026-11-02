@@ -312,64 +312,64 @@ export const EntrancePaywall: React.FC<EntrancePaywallProps> = ({
         </div>
       </section>
 
-      {/* 5. WHITE CARD WITH 4 FEATURE CATEGORIES - Full width container */}
-      <section className="bg-[#07152b] px-4 sm:px-8 lg:px-12 pt-6 pb-14">
-        <div className="w-full max-w-7xl mx-auto bg-white text-slate-900 rounded-2xl sm:rounded-3xl shadow-2xl border border-slate-100 overflow-hidden">
-          <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-slate-100">
+      {/* 5. DARK BLUE CARD WITH 4 FEATURE CATEGORIES */}
+      <section className="bg-[#07152b] px-4 sm:px-8 lg:px-12 py-10 sm:py-14 border-b border-white/10">
+        <div className="w-full max-w-7xl mx-auto text-white">
+          <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-white/10 border-y border-white/10">
             
-            {/* Feature 1: DIREKTE LINKS */}
-            <div className="p-6 sm:p-7 flex items-start gap-4">
-              <div className="shrink-0 w-14 h-14 rounded-2xl bg-sky-50 flex items-center justify-center border border-sky-100 shadow-xs">
+            {/* Feature 1: OFFICIELLE HJEMMESIDER */}
+            <div className="p-6 sm:p-8 flex items-start gap-4 sm:gap-5">
+              <div className="shrink-0 w-12 h-12 rounded-xl bg-[#0f2444] border border-white/10 flex items-center justify-center p-2 shadow-xs">
                 {/* Custom Illustrated Magnifying Glass with Link */}
-                <svg className="w-8 h-8" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="16" cy="16" r="10" stroke="#0284c7" strokeWidth="2.5" fill="#e0f2fe" />
+                <svg className="w-10 h-10" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="16" cy="16" r="10" stroke="#38bdf8" strokeWidth="2.5" fill="#0284c7" fillOpacity="0.2" />
                   <path d="M23 23L31 31" stroke="#f43f5e" strokeWidth="3" strokeLinecap="round" />
                   {/* Chain link icon inside glass */}
-                  <path d="M13 18a3 3 0 0 1 0-4.24l1.41-1.42a3 3 0 0 1 4.25 0" stroke="#0369a1" strokeWidth="2" strokeLinecap="round" />
-                  <path d="M19 14a3 3 0 0 1 0 4.24l-1.41 1.42a3 3 0 0 1-4.25 0" stroke="#0369a1" strokeWidth="2" strokeLinecap="round" />
+                  <path d="M13 18a3 3 0 0 1 0-4.24l1.41-1.42a3 3 0 0 1 4.25 0" stroke="#38bdf8" strokeWidth="2" strokeLinecap="round" />
+                  <path d="M19 14a3 3 0 0 1 0 4.24l-1.41 1.42a3 3 0 0 1-4.25 0" stroke="#38bdf8" strokeWidth="2" strokeLinecap="round" />
                 </svg>
               </div>
               <div>
-                <h3 className="font-extrabold text-sm sm:text-base text-slate-900 uppercase tracking-tight">
+                <h3 className="font-extrabold text-sm sm:text-base text-white uppercase tracking-tight">
                   {content.features[0].title}
                 </h3>
-                <p className="text-xs sm:text-sm text-slate-600 mt-1 leading-relaxed">
+                <p className="text-xs sm:text-sm text-slate-300 mt-1.5 leading-relaxed">
                   {content.features[0].desc}
                 </p>
               </div>
             </div>
 
             {/* Feature 2: ALMENE BOLIGER */}
-            <div className="p-6 sm:p-7 flex items-start gap-4">
-              <div className="shrink-0 w-14 h-14 rounded-2xl bg-rose-50 flex items-center justify-center border border-rose-100 shadow-xs">
+            <div className="p-6 sm:p-8 flex items-start gap-4 sm:gap-5">
+              <div className="shrink-0 w-12 h-12 rounded-xl bg-[#0f2444] border border-white/10 flex items-center justify-center p-2 shadow-xs">
                 {/* Custom Illustrated Brick Apartment Building */}
-                <svg className="w-8 h-8" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <rect x="7" y="6" width="22" height="24" rx="2" fill="#ffe4e6" stroke="#e11d48" strokeWidth="2" />
+                <svg className="w-10 h-10" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="7" y="6" width="22" height="24" rx="2" fill="#1e293b" stroke="#e11d48" strokeWidth="2" />
                   {/* Windows */}
-                  <rect x="11" y="9" width="4" height="4" rx="0.5" fill="#0284c7" />
-                  <rect x="21" y="9" width="4" height="4" rx="0.5" fill="#0284c7" />
-                  <rect x="11" y="16" width="4" height="4" rx="0.5" fill="#0284c7" />
-                  <rect x="21" y="16" width="4" height="4" rx="0.5" fill="#0284c7" />
+                  <rect x="11" y="9" width="4" height="4" rx="0.5" fill="#38bdf8" />
+                  <rect x="21" y="9" width="4" height="4" rx="0.5" fill="#38bdf8" />
+                  <rect x="11" y="16" width="4" height="4" rx="0.5" fill="#38bdf8" />
+                  <rect x="21" y="16" width="4" height="4" rx="0.5" fill="#38bdf8" />
                   {/* Entrance Door */}
                   <rect x="15" y="23" width="6" height="7" rx="1" fill="#475569" stroke="#334155" strokeWidth="1.5" />
                   <circle cx="19.5" cy="26.5" r="0.75" fill="#facc15" />
                 </svg>
               </div>
               <div>
-                <h3 className="font-extrabold text-sm sm:text-base text-slate-900 uppercase tracking-tight">
+                <h3 className="font-extrabold text-sm sm:text-base text-white uppercase tracking-tight">
                   {content.features[1].title}
                 </h3>
-                <p className="text-xs sm:text-sm text-slate-600 mt-1 leading-relaxed">
+                <p className="text-xs sm:text-sm text-slate-300 mt-1.5 leading-relaxed">
                   {content.features[1].desc}
                 </p>
               </div>
             </div>
 
             {/* Feature 3: STUDIEBOLIGER */}
-            <div className="p-6 sm:p-7 flex items-start gap-4">
-              <div className="shrink-0 w-14 h-14 rounded-2xl bg-emerald-50 flex items-center justify-center border border-emerald-100 shadow-xs">
+            <div className="p-6 sm:p-8 flex items-start gap-4 sm:gap-5">
+              <div className="shrink-0 w-12 h-12 rounded-xl bg-[#0f2444] border border-white/10 flex items-center justify-center p-2 shadow-xs">
                 {/* Custom Illustrated Students with Graduation Cap & Books */}
-                <svg className="w-8 h-8" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg className="w-10 h-10" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
                   {/* Student 1 */}
                   <circle cx="12" cy="14" r="3.5" fill="#fcd34d" stroke="#d97706" strokeWidth="1.5" />
                   <path d="M6 25c0-3.5 2.5-6 6-6s6 2.5 6 6" fill="#10b981" stroke="#059669" strokeWidth="1.5" />
@@ -377,39 +377,39 @@ export const EntrancePaywall: React.FC<EntrancePaywallProps> = ({
                   <circle cx="23" cy="15" r="3.5" fill="#fcd34d" stroke="#d97706" strokeWidth="1.5" />
                   <path d="M18 25c0-3.5 2.5-6 5.5-6s5.5 2.5 5.5 6" fill="#f43f5e" stroke="#e11d48" strokeWidth="1.5" />
                   {/* Graduation Hat */}
-                  <path d="M23 7L17 10.5L23 14L29 10.5L23 7Z" fill="#1e293b" />
+                  <path d="M23 7L17 10.5L23 14L29 10.5L23 7Z" fill="#38bdf8" />
                   <path d="M28 11v3.5" stroke="#f59e0b" strokeWidth="1.5" />
                 </svg>
               </div>
               <div>
-                <h3 className="font-extrabold text-sm sm:text-base text-slate-900 uppercase tracking-tight">
+                <h3 className="font-extrabold text-sm sm:text-base text-white uppercase tracking-tight">
                   {content.features[2].title}
                 </h3>
-                <p className="text-xs sm:text-sm text-slate-600 mt-1 leading-relaxed">
+                <p className="text-xs sm:text-sm text-slate-300 mt-1.5 leading-relaxed">
                   {content.features[2].desc}
                 </p>
               </div>
             </div>
 
             {/* Feature 4: LEJEVILKÅR & GUIDE */}
-            <div className="p-6 sm:p-7 flex items-start gap-4">
-              <div className="shrink-0 w-14 h-14 rounded-2xl bg-amber-50 flex items-center justify-center border border-amber-100 shadow-xs">
+            <div className="p-6 sm:p-8 flex items-start gap-4 sm:gap-5">
+              <div className="shrink-0 w-12 h-12 rounded-xl bg-[#0f2444] border border-white/10 flex items-center justify-center p-2 shadow-xs">
                 {/* Custom Illustrated House with Lease Document */}
-                <svg className="w-8 h-8" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg className="w-10 h-10" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
                   {/* House roof */}
-                  <path d="M18 5L7 14h3v13h16V14h3L18 5Z" fill="#fff7ed" stroke="#ea580c" strokeWidth="2" strokeLinejoin="round" />
+                  <path d="M18 5L7 14h3v13h16V14h3L18 5Z" fill="#1e293b" stroke="#ea580c" strokeWidth="2" strokeLinejoin="round" />
                   {/* Document sheet */}
-                  <rect x="13" y="13" width="11" height="13" rx="1.5" fill="#ffffff" stroke="#0284c7" strokeWidth="1.5" />
+                  <rect x="13" y="13" width="11" height="13" rx="1.5" fill="#0f172a" stroke="#38bdf8" strokeWidth="1.5" />
                   <line x1="15.5" y1="16.5" x2="21.5" y2="16.5" stroke="#94a3b8" strokeWidth="1.5" strokeLinecap="round" />
                   <line x1="15.5" y1="19.5" x2="21.5" y2="19.5" stroke="#94a3b8" strokeWidth="1.5" strokeLinecap="round" />
                   <line x1="15.5" y1="22.5" x2="19.5" y2="22.5" stroke="#10b981" strokeWidth="1.5" strokeLinecap="round" />
                 </svg>
               </div>
               <div>
-                <h3 className="font-extrabold text-sm sm:text-base text-slate-900 uppercase tracking-tight">
+                <h3 className="font-extrabold text-sm sm:text-base text-white uppercase tracking-tight">
                   {content.features[3].title}
                 </h3>
-                <p className="text-xs sm:text-sm text-slate-600 mt-1 leading-relaxed">
+                <p className="text-xs sm:text-sm text-slate-300 mt-1.5 leading-relaxed">
                   {content.features[3].desc}
                 </p>
               </div>
@@ -419,18 +419,18 @@ export const EntrancePaywall: React.FC<EntrancePaywallProps> = ({
         </div>
       </section>
 
-      {/* 6. "SÅDAN FUNGERER DET" SECTION - Full width container */}
-      <section className="bg-[#f8fafc] text-slate-900 py-16 px-4 sm:px-8 lg:px-12 border-t border-slate-200">
+      {/* 6. "SÅDAN FUNGERER DET" SECTION - Dark navy blue background */}
+      <section className="bg-[#0b1d3a] text-white py-14 sm:py-16 px-4 sm:px-8 lg:px-12 border-b border-white/10">
         <div className="w-full max-w-7xl mx-auto text-center space-y-10">
-          <h2 className="text-lg sm:text-xl font-black tracking-wider text-slate-900 uppercase">
+          <h2 className="text-lg sm:text-xl font-black tracking-wider text-white uppercase">
             {content.howItWorksTitle}
           </h2>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 max-w-5xl mx-auto">
             
             {/* Step 1: Betal 7 kr. */}
-            <div className="flex flex-col items-center p-6 bg-white rounded-2xl border border-slate-200/80 shadow-xs">
-              <div className="w-16 h-14 rounded-xl bg-slate-50 border-2 border-slate-700 flex flex-col justify-between p-2 mb-3 shadow-xs">
+            <div className="flex flex-col items-center p-6 rounded-2xl bg-[#07152b] border border-white/10 hover:border-white/20 transition-all shadow-sm">
+              <div className="w-16 h-14 rounded-xl bg-[#0f2444] border-2 border-white/20 flex flex-col justify-between p-2 mb-3 shadow-inner">
                 <div className="w-full flex justify-between items-center">
                   <div className="w-3 h-2 bg-amber-400 rounded-xs" />
                   <div className="flex gap-0.5">
@@ -438,40 +438,40 @@ export const EntrancePaywall: React.FC<EntrancePaywallProps> = ({
                     <span className="w-2.5 h-2.5 rounded-full bg-amber-400 inline-block -ml-1 opacity-80" />
                   </div>
                 </div>
-                <div className="w-8 h-1 bg-slate-300 rounded-full" />
+                <div className="w-8 h-1 bg-slate-400 rounded-full" />
               </div>
-              <span className="font-extrabold text-sm sm:text-base text-slate-900">
+              <span className="font-extrabold text-sm sm:text-base text-white">
                 {content.steps[0].title}
               </span>
             </div>
 
             {/* Step 2: Log ind */}
-            <div className="flex flex-col items-center p-6 bg-white rounded-2xl border border-slate-200/80 shadow-xs">
-              <div className="w-16 h-14 rounded-xl bg-slate-50 border-2 border-slate-700 flex items-center justify-center relative mb-3 shadow-xs">
+            <div className="flex flex-col items-center p-6 rounded-2xl bg-[#07152b] border border-white/10 hover:border-white/20 transition-all shadow-sm">
+              <div className="w-16 h-14 rounded-xl bg-[#0f2444] border-2 border-white/20 flex items-center justify-center relative mb-3 shadow-inner">
                 {/* Arrow into user icon */}
                 <div className="flex items-center gap-1">
-                  <ArrowRight className="w-4 h-4 text-slate-700 stroke-[2.5]" />
-                  <div className="w-6 h-6 rounded-full bg-rose-100 border border-rose-400 flex items-center justify-center">
-                    <span className="text-[10px] text-rose-600 font-bold">👤</span>
+                  <ArrowRight className="w-4 h-4 text-cyan-400 stroke-[2.5]" />
+                  <div className="w-6 h-6 rounded-full bg-rose-500/20 border border-rose-400/50 flex items-center justify-center">
+                    <span className="text-[10px] text-rose-300 font-bold">👤</span>
                   </div>
                 </div>
               </div>
-              <span className="font-extrabold text-sm sm:text-base text-slate-900">
+              <span className="font-extrabold text-sm sm:text-base text-white">
                 {content.steps[1].title}
               </span>
             </div>
 
             {/* Step 3: Find din bolig */}
-            <div className="flex flex-col items-center p-6 bg-white rounded-2xl border border-slate-200/80 shadow-xs">
-              <div className="w-16 h-14 rounded-xl bg-slate-50 border-2 border-slate-700 flex items-center justify-center relative mb-3 shadow-xs">
+            <div className="flex flex-col items-center p-6 rounded-2xl bg-[#07152b] border border-white/10 hover:border-white/20 transition-all shadow-sm">
+              <div className="w-16 h-14 rounded-xl bg-[#0f2444] border-2 border-white/20 flex items-center justify-center relative mb-3 shadow-inner">
                 {/* House with magnifying glass */}
                 <svg className="w-8 h-8" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M16 5L6 14h3v11h14V14h3L16 5Z" fill="#ffe4e6" stroke="#e11d48" strokeWidth="2" strokeLinejoin="round" />
-                  <circle cx="21" cy="21" r="5" fill="#ffffff" stroke="#10b981" strokeWidth="2.5" />
+                  <path d="M16 5L6 14h3v11h14V14h3L16 5Z" fill="#1e293b" stroke="#e11d48" strokeWidth="2" strokeLinejoin="round" />
+                  <circle cx="21" cy="21" r="5" fill="#07152b" stroke="#10b981" strokeWidth="2.5" />
                   <line x1="24.5" y1="24.5" x2="28" y2="28" stroke="#10b981" strokeWidth="2.5" strokeLinecap="round" />
                 </svg>
               </div>
-              <span className="font-extrabold text-sm sm:text-base text-slate-900">
+              <span className="font-extrabold text-sm sm:text-base text-white">
                 {content.steps[2].title}
               </span>
             </div>
@@ -484,7 +484,7 @@ export const EntrancePaywall: React.FC<EntrancePaywallProps> = ({
               href={STRIPE_PAYMENT_LINK}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-xs font-bold text-emerald-600 hover:text-emerald-700 hover:underline uppercase tracking-wider"
+              className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-emerald-400 hover:text-emerald-300 hover:underline uppercase tracking-wider"
             >
               <span>{language === 'da' ? 'Kom i gang for 7 kr. / md' : 'Start now for 7 DKK / mo'}</span>
               <ArrowRight className="w-3.5 h-3.5" />
