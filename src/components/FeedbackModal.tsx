@@ -230,7 +230,7 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
               </div>
               <div>
                 <h3 className="text-base sm:text-lg font-black text-white tracking-tight leading-tight">
-                  {language === 'da' ? 'Giv Feedback & Forslag' : 'Send Feedback & Suggestions'}
+                  {language === 'da' ? 'Brugeranmeldelser' : 'User Reviews'}
                 </h3>
                 <div className="flex items-center gap-1.5 text-[11px] text-cyan-300 font-medium">
                   <Database className="w-3 h-3 text-emerald-400" />
@@ -260,7 +260,7 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
                   : 'border-transparent text-slate-400 hover:text-slate-200'
               }`}
             >
-              {language === 'da' ? '✍️ Skriv feedback' : '✍️ Write feedback'}
+              {language === 'da' ? '✍️ Skriv anmeldelse' : '✍️ Write review'}
             </button>
             <button
               type="button"
@@ -274,7 +274,7 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
                   : 'border-transparent text-slate-400 hover:text-slate-200'
               }`}
             >
-              <span>{language === 'da' ? '💬 Seneste feedback' : '💬 Recent feedback'}</span>
+              <span>{language === 'da' ? '💬 Seneste anmeldelser' : '💬 Recent reviews'}</span>
               <span className="px-1.5 py-0.5 rounded-full text-[10px] bg-cyan-500/20 text-cyan-300 font-mono">
                 {feedbacks.length}
               </span>
@@ -420,38 +420,31 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
                   )}
 
                   {/* Action Buttons */}
-                  <div className="pt-2 flex items-center justify-between gap-3 border-t border-white/10">
-                    <div className="flex items-center gap-1.5 text-[11px] text-slate-400">
-                      <Database className="w-3.5 h-3.5 text-cyan-400" />
-                      <span>Google Cloud Firestore</span>
-                    </div>
-
-                    <div className="flex items-center gap-2.5">
-                      <button
-                        type="button"
-                        onClick={onClose}
-                        className="px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white transition-colors"
-                      >
-                        {language === 'da' ? 'Annuller' : 'Cancel'}
-                      </button>
-                      <button
-                        type="submit"
-                        disabled={isSubmitting}
-                        className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider text-white bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 active:scale-95 disabled:opacity-50 transition-all shadow-md shadow-blue-600/30"
-                      >
-                        {isSubmitting ? (
-                          <>
-                            <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                            <span>{language === 'da' ? 'Gemmer i Firestore...' : 'Saving to Firestore...'}</span>
-                          </>
-                        ) : (
-                          <>
-                            <Send className="w-3.5 h-3.5" />
-                            <span>{language === 'da' ? 'Gem feedback' : 'Submit feedback'}</span>
-                          </>
-                        )}
-                      </button>
-                    </div>
+                  <div className="pt-2 flex items-center justify-end gap-2.5 border-t border-white/10">
+                    <button
+                      type="button"
+                      onClick={onClose}
+                      className="px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white transition-colors"
+                    >
+                      {language === 'da' ? 'Annuller' : 'Cancel'}
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider text-white bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 active:scale-95 disabled:opacity-50 transition-all shadow-md shadow-blue-600/30"
+                    >
+                      {isSubmitting ? (
+                        <>
+                          <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                          <span>{language === 'da' ? 'Gemmer...' : 'Saving...'}</span>
+                        </>
+                      ) : (
+                        <>
+                          <Send className="w-3.5 h-3.5" />
+                          <span>{language === 'da' ? 'Gem anmeldelse' : 'Submit review'}</span>
+                        </>
+                      )}
+                    </button>
                   </div>
                 </form>
               )

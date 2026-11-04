@@ -88,7 +88,7 @@ export const Header: React.FC<HeaderProps> = ({
                 className="px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-cyan-950/80 text-cyan-300 border border-cyan-500/30 flex items-center gap-1"
               >
                 <MessageSquarePlus className="w-3.5 h-3.5 text-cyan-400" />
-                <span>Feedback</span>
+                <span>{language === 'da' ? 'Anmeldelser' : 'Reviews'}</span>
               </button>
             )}
             <button
@@ -112,7 +112,7 @@ export const Header: React.FC<HeaderProps> = ({
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-cyan-950/70 hover:bg-cyan-900/90 text-cyan-300 hover:text-white border border-cyan-500/30 transition-all shadow-xs"
             >
               <MessageSquarePlus className="w-3.5 h-3.5 text-cyan-400" />
-              <span>Feedback</span>
+              <span>{language === 'da' ? 'Anmeldelser' : 'Reviews'}</span>
             </button>
           )}
 

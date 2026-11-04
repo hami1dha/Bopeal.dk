@@ -258,7 +258,7 @@ export const EntrancePaywall: React.FC<EntrancePaywallProps> = ({
                 className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-bold uppercase tracking-wider text-cyan-300 hover:text-white bg-cyan-950/60 hover:bg-cyan-900/80 border border-cyan-500/30 transition-all shadow-xs"
               >
                 <MessageSquarePlus className="w-3.5 h-3.5 text-cyan-400" />
-                <span>Feedback</span>
+                <span>{language === 'da' ? 'Anmeldelser' : 'Reviews'}</span>
               </button>
             </nav>
 
@@ -549,7 +549,7 @@ export const EntrancePaywall: React.FC<EntrancePaywallProps> = ({
               className="text-cyan-400 hover:text-cyan-300 font-semibold inline-flex items-center gap-1"
             >
               <MessageSquarePlus className="w-3 h-3" />
-              <span>{language === 'da' ? 'Giv feedback' : 'Give feedback'}</span>
+              <span>{language === 'da' ? 'Anmeldelser' : 'Reviews'}</span>
             </button>
           </nav>
 
