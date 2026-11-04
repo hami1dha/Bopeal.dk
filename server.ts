@@ -154,8 +154,7 @@ const INITIAL_FEEDBACKS = [
     rating: 5,
     category: 'Ros til bopæl.dk',
     message: 'Fantastisk samling af almene ventelister. Det sparede mig for måneders søgen!',
-    createdAt: new Date(Date.now() - 86400000 * 2).toISOString(),
-    storedInFirestore: true
+    createdAt: new Date(Date.now() - 86400000 * 2).toISOString()
   },
   {
     id: 'fb-seed-2',
@@ -164,8 +163,7 @@ const INITIAL_FEEDBACKS = [
     rating: 5,
     category: 'Forslag til forbedring',
     message: 'Kunne I tilføje direkte links til kollegier i Odense og Esbjerg? Ellers et fremragende initiativ!',
-    createdAt: new Date(Date.now() - 86400000 * 5).toISOString(),
-    storedInFirestore: true
+    createdAt: new Date(Date.now() - 86400000 * 5).toISOString()
   }
 ];
 
@@ -212,8 +210,7 @@ app.post('/api/feedback', (req, res) => {
     rating: Math.max(1, Math.min(5, Number(rating) || 5)),
     category: String(category || 'Feedback').slice(0, 60),
     message: String(message).trim().slice(0, 2000),
-    createdAt: new Date().toISOString(),
-    storedInFirestore: true
+    createdAt: new Date().toISOString()
   };
 
   const current = getStoredFeedbacks();

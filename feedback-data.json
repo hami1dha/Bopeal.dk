@@ -1,0 +1,20 @@
+[
+  {
+    "id": "fb-seed-1",
+    "name": "Søren K.",
+    "email": "",
+    "rating": 5,
+    "category": "Ros til bopæl.dk",
+    "message": "Fantastisk samling af almene ventelister. Det sparede mig for måneders søgen!",
+    "createdAt": "2026-11-02T21:12:33.628Z"
+  },
+  {
+    "id": "fb-seed-2",
+    "name": "Camilla M.",
+    "email": "",
+    "rating": 5,
+    "category": "Forslag til forbedring",
+    "message": "Kunne I tilføje direkte links til kollegier i Odense og Esbjerg? Ellers et fremragende initiativ!",
+    "createdAt": "2026-10-30T21:12:33.628Z"
+  }
+]

@@ -7,11 +7,7 @@ import {
   Send, 
   CheckCircle2, 
   AlertCircle, 
-  Database, 
-  Sparkles,
-  Clock,
-  User,
-  Tag
+  Clock
 } from 'lucide-react';
 import { collection, addDoc, getDocs, query, orderBy, limit, serverTimestamp } from 'firebase/firestore';
 import { db, handleFirestoreError, OperationType } from '../firebase';
@@ -25,7 +21,6 @@ export interface FeedbackItem {
   category: string;
   message: string;
   createdAt: string | number;
-  storedInFirestore?: boolean;
 }
 
 interface FeedbackModalProps {
@@ -89,8 +84,7 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
           rating: Number(data.rating) || 5,
           category: data.category || 'Feedback',
           message: data.message || '',
-          createdAt: data.createdAt ? (typeof data.createdAt === 'object' && 'toDate' in data.createdAt ? (data.createdAt as any).toDate().toISOString() : String(data.createdAt)) : new Date().toISOString(),
-          storedInFirestore: true
+          createdAt: data.createdAt ? (typeof data.createdAt === 'object' && 'toDate' in data.createdAt ? (data.createdAt as any).toDate().toISOString() : String(data.createdAt)) : new Date().toISOString()
         });
       });
     } catch (err) {
@@ -108,7 +102,7 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
           const existingIds = new Set(loadedList.map(f => f.id));
           json.feedbacks.forEach((item: FeedbackItem) => {
             if (!existingIds.has(item.id)) {
-              loadedList.push({ ...item, storedInFirestore: true });
+              loadedList.push(item);
             }
           });
         }
@@ -232,10 +226,6 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
                 <h3 className="text-base sm:text-lg font-black text-white tracking-tight leading-tight">
                   {language === 'da' ? 'Brugeranmeldelser' : 'User Reviews'}
                 </h3>
-                <div className="flex items-center gap-1.5 text-[11px] text-cyan-300 font-medium">
-                  <Database className="w-3 h-3 text-emerald-400" />
-                  <span>{language === 'da' ? 'Gemmes permanent i Google Cloud Firestore' : 'Permanently saved in Google Cloud Firestore'}</span>
-                </div>
               </div>
             </div>
 
@@ -290,12 +280,12 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
                     <CheckCircle2 className="w-10 h-10" />
                   </div>
                   <h4 className="text-xl font-bold text-white">
-                    {language === 'da' ? 'Mange tak for din feedback!' : 'Thank you for your feedback!'}
+                    {language === 'da' ? 'Mange tak for din anmeldelse!' : 'Thank you for your review!'}
                   </h4>
                   <p className="text-xs sm:text-sm text-slate-300 max-w-md mx-auto leading-relaxed">
                     {language === 'da'
-                      ? 'Dine input og ønsker er nu gemt permanent i Google Cloud Firestore. Vi bruger alle henvendelser til løbende at forbedre boligdatabasen på bopæl.dk.'
-                      : 'Your feedback and suggestions are now permanently stored in Google Cloud Firestore. We use all entries to continuously improve the housing database on bopæl.dk.'}
+                      ? 'Tak for dit bidrag. Din anmeldelse er nu registreret på bopæl.dk.'
+                      : 'Thank you for your contribution. Your review is now recorded on bopæl.dk.'}
                   </p>
                   <div className="pt-4 flex flex-wrap items-center justify-center gap-3">
                     <button
@@ -303,7 +293,7 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
                       onClick={() => setActiveTab('list')}
                       className="px-5 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider text-cyan-300 bg-[#07152b] border border-cyan-500/30 hover:bg-[#0f2444] transition-all"
                     >
-                      {language === 'da' ? 'Se seneste feedback' : 'View recent feedback'}
+                      {language === 'da' ? 'Se seneste anmeldelser' : 'View recent reviews'}
                     </button>
                     <button
                       type="button"
@@ -436,12 +426,12 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
                       {isSubmitting ? (
                         <>
                           <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                          <span>{language === 'da' ? 'Gemmer...' : 'Saving...'}</span>
+                          <span>{language === 'da' ? 'Sender...' : 'Sending...'}</span>
                         </>
                       ) : (
                         <>
                           <Send className="w-3.5 h-3.5" />
-                          <span>{language === 'da' ? 'Gem anmeldelse' : 'Submit review'}</span>
+                          <span>{language === 'da' ? 'Send anmeldelse' : 'Send review'}</span>
                         </>
                       )}
                     </button>
@@ -452,7 +442,7 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
               <div className="space-y-3">
                 <div className="flex items-center justify-between pb-2 border-b border-white/10 text-xs">
                   <span className="text-slate-400 font-medium">
-                    {language === 'da' ? 'Permanent registrerede henvendelser:' : 'Permanently registered submissions:'}
+                    {language === 'da' ? 'Offentliggjorte anmeldelser:' : 'Published reviews:'}
                   </span>
                   <button
                     type="button"
@@ -466,18 +456,18 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
                 {isLoadingFeedbacks ? (
                   <div className="py-12 text-center text-xs text-slate-400 space-y-2">
                     <div className="w-6 h-6 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin mx-auto" />
-                    <p>{language === 'da' ? 'Henter feedback fra Google Cloud Firestore...' : 'Loading feedback from Google Cloud Firestore...'}</p>
+                    <p>{language === 'da' ? 'Henter anmeldelser...' : 'Loading reviews...'}</p>
                   </div>
                 ) : feedbacks.length === 0 ? (
                   <div className="py-12 text-center text-xs text-slate-400 space-y-2">
                     <MessageSquarePlus className="w-8 h-8 mx-auto text-slate-600" />
-                    <p>{language === 'da' ? 'Ingen feedback modtaget endnu. Vær den første til at skrive!' : 'No feedback received yet. Be the first to submit!'}</p>
+                    <p>{language === 'da' ? 'Ingen anmeldelser endnu. Vær den første til at skrive!' : 'No reviews yet. Be the first to submit!'}</p>
                     <button
                       type="button"
                       onClick={() => setActiveTab('form')}
                       className="text-cyan-400 hover:underline font-bold pt-1 block mx-auto"
                     >
-                      {language === 'da' ? 'Skriv feedback nu' : 'Write feedback now'}
+                      {language === 'da' ? 'Skriv anmeldelse nu' : 'Write review now'}
                     </button>
                   </div>
                 ) : (
@@ -525,11 +515,6 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
                                   year: 'numeric'
                                 })
                               : String(item.createdAt)}
-                          </span>
-
-                          <span className="inline-flex items-center gap-1 text-emerald-400/90 font-medium">
-                            <Database className="w-2.5 h-2.5" />
-                            <span>Firestore sync</span>
                           </span>
                         </div>
                       </div>
