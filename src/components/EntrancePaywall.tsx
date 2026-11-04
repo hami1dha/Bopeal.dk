@@ -11,13 +11,15 @@ import {
   HelpCircle,
   CreditCard,
   UserCheck,
-  Search
+  Search,
+  MessageSquarePlus
 } from 'lucide-react';
 import { STRIPE_PAYMENT_LINK } from '../data/housingData';
 import { Language } from '../types';
 import { BOPEL_LOGO, BOPEL_FALLBACK_LOGO } from '../assets/logo';
 import { COMPLIANCE_DATA, LegalSectionKey } from '../data/legalAndCompliance';
 import { LegalModal } from './LegalModal';
+import { FeedbackModal } from './FeedbackModal';
 import { 
   isValidAccessCode, 
   isValidStripeSessionId, 
@@ -38,6 +40,7 @@ export const EntrancePaywall: React.FC<EntrancePaywallProps> = ({
 }) => {
   const [isVerifying, setIsVerifying] = useState(false);
   const [showMemberModal, setShowMemberModal] = useState(false);
+  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   const [accessInput, setAccessInput] = useState('');
   const [verifyError, setVerifyError] = useState('');
   const [activeLegalModal, setActiveLegalModal] = useState<LegalSectionKey | null>(null);
@@ -247,6 +250,15 @@ export const EntrancePaywall: React.FC<EntrancePaywallProps> = ({
                 className="hover:text-cyan-400 transition-colors py-1"
               >
                 FAQ
+              </button>
+              <button
+                type="button"
+                id="btn-nav-feedback"
+                onClick={() => setShowFeedbackModal(true)}
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-bold uppercase tracking-wider text-cyan-300 hover:text-white bg-cyan-950/60 hover:bg-cyan-900/80 border border-cyan-500/30 transition-all shadow-xs"
+              >
+                <MessageSquarePlus className="w-3.5 h-3.5 text-cyan-400" />
+                <span>Feedback</span>
               </button>
             </nav>
 
@@ -530,6 +542,15 @@ export const EntrancePaywall: React.FC<EntrancePaywallProps> = ({
                 </button>
               </React.Fragment>
             ))}
+            <span className="text-slate-600">·</span>
+            <button
+              type="button"
+              onClick={() => setShowFeedbackModal(true)}
+              className="text-cyan-400 hover:text-cyan-300 font-semibold inline-flex items-center gap-1"
+            >
+              <MessageSquarePlus className="w-3 h-3" />
+              <span>{language === 'da' ? 'Giv feedback' : 'Give feedback'}</span>
+            </button>
           </nav>
 
           <p className="text-slate-500 text-[11px] pt-1">
@@ -631,6 +652,13 @@ export const EntrancePaywall: React.FC<EntrancePaywallProps> = ({
           onSelectSection={(section) => setActiveLegalModal(section)}
         />
       )}
+
+      {/* 10. FEEDBACK MODAL (Permanently saved in Google Cloud Firestore) */}
+      <FeedbackModal
+        isOpen={showFeedbackModal}
+        onClose={() => setShowFeedbackModal(false)}
+        language={language}
+      />
 
     </div>
   );

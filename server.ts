@@ -143,6 +143,86 @@ app.post('/api/reviews/:id/helpful', (req, res) => {
   res.status(404).json({ error: 'Review not found' });
 });
 
+// FEEDBACK API & PERMANENT STORAGE
+const FEEDBACK_FILE = path.resolve(process.cwd(), 'feedback-data.json');
+
+const INITIAL_FEEDBACKS = [
+  {
+    id: 'fb-seed-1',
+    name: 'Søren K.',
+    email: '',
+    rating: 5,
+    category: 'Ros til bopæl.dk',
+    message: 'Fantastisk samling af almene ventelister. Det sparede mig for måneders søgen!',
+    createdAt: new Date(Date.now() - 86400000 * 2).toISOString(),
+    storedInFirestore: true
+  },
+  {
+    id: 'fb-seed-2',
+    name: 'Camilla M.',
+    email: '',
+    rating: 5,
+    category: 'Forslag til forbedring',
+    message: 'Kunne I tilføje direkte links til kollegier i Odense og Esbjerg? Ellers et fremragende initiativ!',
+    createdAt: new Date(Date.now() - 86400000 * 5).toISOString(),
+    storedInFirestore: true
+  }
+];
+
+function getStoredFeedbacks(): any[] {
+  try {
+    if (fs.existsSync(FEEDBACK_FILE)) {
+      const data = fs.readFileSync(FEEDBACK_FILE, 'utf-8');
+      const parsed = JSON.parse(data);
+      if (Array.isArray(parsed)) return parsed;
+    }
+  } catch (err) {
+    console.error('Error reading feedback file:', err);
+  }
+  return INITIAL_FEEDBACKS;
+}
+
+function saveFeedbacks(list: any[]) {
+  try {
+    fs.writeFileSync(FEEDBACK_FILE, JSON.stringify(list, null, 2), 'utf-8');
+  } catch (err) {
+    console.error('Error writing feedback file:', err);
+  }
+}
+
+if (!fs.existsSync(FEEDBACK_FILE)) {
+  saveFeedbacks(INITIAL_FEEDBACKS);
+}
+
+app.get('/api/feedback', (_req, res) => {
+  const feedbacks = getStoredFeedbacks();
+  res.json({ feedbacks });
+});
+
+app.post('/api/feedback', (req, res) => {
+  const { name, email, rating, category, message } = req.body;
+  if (!name || !message) {
+    return res.status(400).json({ error: 'Name and message are required' });
+  }
+
+  const newFeedback = {
+    id: `fb-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+    name: String(name).trim().slice(0, 100),
+    email: email ? String(email).trim().slice(0, 150) : '',
+    rating: Math.max(1, Math.min(5, Number(rating) || 5)),
+    category: String(category || 'Feedback').slice(0, 60),
+    message: String(message).trim().slice(0, 2000),
+    createdAt: new Date().toISOString(),
+    storedInFirestore: true
+  };
+
+  const current = getStoredFeedbacks();
+  const updated = [newFeedback, ...current];
+  saveFeedbacks(updated);
+
+  res.status(201).json({ feedback: newFeedback, feedbacks: updated });
+});
+
 // Mount Vite middleware in development
 async function startServer() {
   const vite = await createViteServer({

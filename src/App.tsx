@@ -21,6 +21,7 @@ import { HousingGuideModal } from './components/HousingGuideModal';
 import { PaywallModal } from './components/PaywallModal';
 import { EntrancePaywall } from './components/EntrancePaywall';
 import { LegalModal } from './components/LegalModal';
+import { FeedbackModal } from './components/FeedbackModal';
 import { COMPLIANCE_DATA, LegalSectionKey } from './data/legalAndCompliance';
 import { 
   getStoredAuthState, 
@@ -44,6 +45,7 @@ export default function App() {
 
   const [showPaywallModal, setShowPaywallModal] = useState<boolean>(false);
   const [showGuideModal, setShowGuideModal] = useState<boolean>(false);
+  const [showFeedbackModal, setShowFeedbackModal] = useState<boolean>(false);
   const [activeLegalModal, setActiveLegalModal] = useState<LegalSectionKey | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedTag, setSelectedTag] = useState<HousingTag | 'all' | 'favorites'>('all');
@@ -263,6 +265,7 @@ export default function App() {
         onOpenPaywall={() => setShowPaywallModal(true)}
         onLockApp={handleLockApp}
         onOpenLegal={(sec) => setActiveLegalModal(sec)}
+        onOpenFeedback={() => setShowFeedbackModal(true)}
       />
 
       {/* Unlocked Member Dashboard Banner - Dark Cinematic */}
@@ -552,6 +555,13 @@ export default function App() {
         onUnlockSuccess={handleUnlockSuccess}
         language={language}
         canDismiss={true}
+      />
+
+      {/* Feedback Modal (Google Cloud Firestore) */}
+      <FeedbackModal
+        isOpen={showFeedbackModal}
+        onClose={() => setShowFeedbackModal(false)}
+        language={language}
       />
     </div>
   );

@@ -1,52 +1,45 @@
 {
   "entities": {
-    "reviews": {
-      "title": "Member Reviews",
-      "description": "Public reviews and testimonials left by verified members",
+    "feedback": {
+      "title": "User Feedback",
+      "description": "User feedback, suggestions, and ratings stored permanently in Google Cloud Firestore",
       "type": "object",
       "properties": {
         "name": {
           "type": "string",
-          "description": "Full name or alias of the reviewer"
+          "description": "Name or alias of the person providing feedback",
+          "maxLength": 100
         },
-        "city": {
+        "email": {
           "type": "string",
-          "description": "City or area in Denmark"
+          "description": "Optional email for follow-up",
+          "maxLength": 150
         },
         "rating": {
           "type": "number",
-          "description": "Rating score between 1 and 5"
+          "description": "Rating score from 1 to 5 stars"
         },
-        "title": {
+        "category": {
           "type": "string",
-          "description": "Short headline of the review"
+          "description": "Feedback category (Forslag, Ros, Fejl/Hjælp, Boligønske)"
         },
-        "comment": {
+        "message": {
           "type": "string",
-          "description": "Full text comment of the review"
-        },
-        "date": {
-          "type": "string",
-          "description": "Formatted date string"
+          "description": "Detailed feedback message",
+          "maxLength": 2000
         },
         "createdAt": {
-          "type": "number",
-          "description": "Timestamp for ordering"
-        },
-        "verifiedBuyer": {
-          "type": "boolean",
-          "description": "Flag indicating verified member"
-        },
-        "helpfulCount": {
-          "type": "number",
-          "description": "Count of helpful votes"
-        },
-        "categoryTag": {
           "type": "string",
-          "description": "Tag like Studiebolig, Pensionskasse, Almene boliger"
+          "description": "Timestamp formatted string or ISO timestamp"
         }
       },
-      "required": ["name", "rating", "title", "comment"]
+      "required": ["name", "rating", "category", "message"]
+    }
+  },
+  "firestore": {
+    "/feedback/{feedbackId}": {
+      "schema": "feedback",
+      "description": "Permanent collection of user and member feedback stored in Firestore"
     }
   }
 }

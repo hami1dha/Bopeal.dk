@@ -7,7 +7,8 @@ import {
   BookOpen, 
   ShieldCheck,
   Lock,
-  CreditCard
+  CreditCard,
+  MessageSquarePlus
 } from 'lucide-react';
 import { Language } from '../types';
 import { translations } from '../data/translations';
@@ -25,6 +26,7 @@ interface HeaderProps {
   onOpenPaywall: () => void;
   onLockApp?: () => void;
   onOpenLegal?: (section: LegalSectionKey) => void;
+  onOpenFeedback?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -38,6 +40,7 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenPaywall,
   onLockApp,
   onOpenLegal,
+  onOpenFeedback,
 }) => {
   const t = translations[language];
   const compliance = COMPLIANCE_DATA[language];
@@ -78,6 +81,16 @@ export const Header: React.FC<HeaderProps> = ({
 
           {/* Quick Mobile Language Switcher */}
           <div className="md:hidden flex items-center gap-1.5">
+            {onOpenFeedback && (
+              <button
+                type="button"
+                onClick={onOpenFeedback}
+                className="px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-cyan-950/80 text-cyan-300 border border-cyan-500/30 flex items-center gap-1"
+              >
+                <MessageSquarePlus className="w-3.5 h-3.5 text-cyan-400" />
+                <span>Feedback</span>
+              </button>
+            )}
             <button
               type="button"
               onClick={onToggleLanguage}
@@ -91,6 +104,18 @@ export const Header: React.FC<HeaderProps> = ({
 
         {/* Action Controls & Subscription Status */}
         <div className="flex flex-wrap items-center justify-end gap-2 w-full md:w-auto">
+          {/* Feedback button */}
+          {onOpenFeedback && (
+            <button
+              type="button"
+              onClick={onOpenFeedback}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-cyan-950/70 hover:bg-cyan-900/90 text-cyan-300 hover:text-white border border-cyan-500/30 transition-all shadow-xs"
+            >
+              <MessageSquarePlus className="w-3.5 h-3.5 text-cyan-400" />
+              <span>Feedback</span>
+            </button>
+          )}
+
           {/* Housing Guide button */}
           <button
             type="button"
